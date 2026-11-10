@@ -1,6 +1,6 @@
 # Bước 1 — Huy (Owner / Báo cáo / Ràng buộc)
 
-> Issue: #8 · Nhánh: `step1/huy-vision` · Milestone Bước 1 hết hạn 16/11/2026
+> Issue: #8 · Milestone Bước 1 hết hạn 16/11/2026
 
 ## 1. User class — Gym Owner (SRS §2.2)
 
@@ -11,7 +11,7 @@
 ## 2. §2.3 Môi trường vận hành
 
 - OE-1: Hệ thống chạy trên web, hiển thị đúng trên trình duyệt Chrome và Edge (2 phiên bản mới nhất) ở giao diện responsive.
-- OE-2: Quầy dùng máy tính hoặc tablet, tablet tại cửa dùng camera để quét QR.
+- OE-2: Quầy dùng máy tính hoặc tablet; tablet tại cửa dùng camera để quét QR.
 - OE-3: Máy chủ đặt trên cloud Linux, truy cập qua HTTPS; dữ liệu lưu trong CSDL quan hệ dùng chung cho mọi actor.
 - OE-4: Tích hợp bên ngoài: Payment Gateway qua REST API, SMS Service qua API, module sinh và xác thực mã QR.
 
@@ -20,9 +20,9 @@
 - CON-1: Tuân thủ Nghị định 13/2023/NĐ-CP khi thu thập và xử lý dữ liệu cá nhân của khách (CCCD, SĐT, email).
 - CON-2: Giao diện bằng tiếng Việt; tiền tệ **VND**; múi giờ **UTC+7**; ngày hiển thị dạng **dd/mm/yyyy**.
 - CON-3: Mọi sơ đồ UML, DFD, ERD vẽ bằng **Visual Paradigm** và nộp file `.vpp`; wireframe vẽ bằng Figma, Stitch hoặc draw.io.
-- CON-4: Thanh toán online xử lý qua Payment Gateway bên ngoài; hệ thống không lưu số thẻ của khách. **[CHỐT]**
-- CON-5: Release 1 phục vụ 1 cơ sở phòng gym. **[CHỐT]**
-- CON-6: Hạn nộp: Bước 1 theo milestone là 16/11/2026; hạn nộp cả bài do Phước điền. **[CHỐT]**
+- CON-4: Thanh toán online xử lý qua Payment Gateway bên ngoài; hệ thống không lưu số thẻ của khách.
+- CON-5: Release 1 phục vụ 1 cơ sở phòng gym.
+- CON-6: Mỗi bước nộp theo hạn milestone trên GitHub (Bước 1 hết hạn 16/11/2026); hạn nộp cả bài theo thông báo của giảng viên.
 
 ## 4. Scope báo cáo và thanh toán (Release 1)
 
@@ -38,30 +38,25 @@
 
 | ID | Mục tiêu kinh doanh | Chỉ số đo (success metric) |
 |---|---|---|
-| BO-04 | Chủ gym ra quyết định vận hành dựa trên số liệu thay cho thống kê thủ công | Báo cáo doanh thu, check-in, PT hoàn tất xuất được ra Excel trong **≤ 1 phút**; Owner mở báo cáo **ít nhất 1 lần/tuần** |
+| BO-04 | Chủ gym ra quyết định vận hành dựa trên số liệu thay cho thống kê thủ công | Trong 3 tháng đầu sau khi đưa vào sử dụng: (1) ≥ 90% lượt xuất báo cáo tháng ra Excel hoàn tất trong **≤ 60 giây**; (2) Owner mở báo cáo **ít nhất 1 lần/tuần** trong ≥ 10 trên 12 tuần |
 
-- **Cách đo:** bấm giờ trên môi trường thử, từ lúc Owner bấm tạo báo cáo đến lúc tải xong file `.xlsx` với dữ liệu 1 tháng. Số lần mở báo cáo/tuần lấy từ log hệ thống.
-- **[CHỐT]** cỡ dữ liệu dùng để đo (ví dụ 1 tháng, N lượt check-in) và mốc thời gian đạt mục tiêu (ví dụ 3 tháng sau khi đưa vào sử dụng).
+**Cách đo:**
 
-## 6. BR / CSKH (nháp, nhóm chốt ở Bước 3)
+- **Chỉ số (1) — thời gian xuất báo cáo:** chạy 20 lần trên môi trường thử với dữ liệu 1 tháng gồm 500 membership đang hoạt động, 15.000 lượt check-in và 400 booking PT. Mỗi lần bấm giờ từ lúc Owner bấm "Tạo báo cáo" đến lúc tải xong file `.xlsx`. Đạt khi có ít nhất 18 trên 20 lần ≤ 60 giây (tương đương 90%).
+- **Chỉ số (2) — mức độ sử dụng:** đếm từ log hệ thống số tuần trong 12 tuần đầu có ít nhất 1 lượt Owner mở trang báo cáo. Đạt khi có ≥ 10 trên 12 tuần.
+
+## 6. BR / CSKH (nháp, nhóm chốt chính thức ở Bước 3)
 
 | ID | Business rule | Loại | Nguồn |
 |---|---|---|---|
 | BR-12 | Khiếu nại chỉ được tạo trong **7 ngày** sau buổi tập hoặc sự kiện liên quan | Constraint | CSKH |
-
-Cần Owner chốt chính sách hoàn tiền: **[CHỐT]** hoàn trong bao nhiêu ngày làm việc sau khi booking bị từ chối hoặc hủy, hoàn về đâu (cổng thanh toán hay tiền mặt tại quầy), và có khấu trừ phí giao dịch không.
+| BR-13 | Khi booking PT bị từ chối hoặc quá 24 giờ không được phản hồi, hệ thống hoàn **100%** số tiền đã thu trong vòng **3 ngày làm việc**, về đúng phương thức thanh toán ban đầu (cổng thanh toán hoặc tiền mặt tại quầy), không khấu trừ phí giao dịch | Action enabler | CSKH / Tài chính |
 
 ## 7. References (§1.4)
 
 1. Nhóm SWR302, `HuongDan_Assignment.md` — Hướng dẫn assignment SRS, FPT University.
-2. Quốc hội/Chính phủ Việt Nam, *Nghị định 13/2023/NĐ-CP về bảo vệ dữ liệu cá nhân*, 17/04/2023.
+2. Chính phủ Việt Nam, *Nghị định 13/2023/NĐ-CP về bảo vệ dữ liệu cá nhân*, 17/04/2023.
 3. Visual Paradigm Community — tài liệu hướng dẫn UML/ERD (https://www.visual-paradigm.com).
-4. Giáo trình môn SWR302 (các chương 11, 12, 14, 17 được đề nhắc tới). **[CHỐT]** ghi đúng tên sách, tác giả, phiên bản theo giáo trình của lớp.
+4. Wiegers, K. & Beatty, J., *Software Requirements*, 3rd Edition, Microsoft Press, 2013 — các chương 11, 12, 14, 17 được đề nhắc tới.
 5. IEEE Std 830-1998, *IEEE Recommended Practice for Software Requirements Specifications*.
-6. `kimi2.5-project.md` — ý tưởng ban đầu của nhóm (nếu dùng nội dung thì phải trích dẫn).
-
-## 8. Ghi chú / câu hỏi cho nhóm
-
-- Số UC trong nháp chung khác bản kimi (ví dụ UC-20 là Gia hạn, UC-24 là Hủy booking PT). Phần này dùng số theo nháp chung, cần nhóm xác nhận bản nào là bản chốt.
-- BO-04 phải khớp với BO-01, BO-02, BO-03 của Thiên và Tuấn về cách ghi số đo.
-- Không dùng các từ "nhanh", "dễ dùng", "v.v." mà không có con số (−0.1 điểm mỗi lỗi).
+6. `kimi2.5-project.md` — ý tưởng ban đầu của nhóm.
