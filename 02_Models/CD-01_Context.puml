@@ -1,0 +1,44 @@
+@startuml CD-01_Context_Diagram_GMS
+!theme plain
+title CD-01 Context Diagram — Gym Management System (GMS)\n(Nháp tham khảo — nộp chính thức phải vẽ bằng Visual Paradigm)
+
+rectangle "0 – Gym Management System (GMS)" as GMS
+
+actor "Customer" as CU
+actor "Personal Trainer" as PT
+actor "Gym Owner" as GO
+rectangle "Payment Gateway" as PAY
+rectangle "SMS Service" as SMS
+rectangle "QR Service" as QR
+rectangle "Time / Scheduler" as TM
+
+CU --> GMS : Thông tin đăng ký tài khoản
+CU --> GMS : Thông tin đăng nhập
+GMS --> CU : Phiên / mã QR membership
+CU --> GMS : Sự kiện check-in/out
+GMS --> CU : Xác nhận check-in/out
+CU --> GMS : Yêu cầu đặt gói PT
+CU --> GMS : Khiếu nại dịch vụ
+GMS --> CU : Kết quả xử lý khiếu nại
+
+PT --> GMS : Phản hồi booking / hồ sơ PT
+GMS --> PT : Yêu cầu booking PT
+
+GO --> GMS : Đăng ký & kích hoạt membership
+GO --> GMS : Quyết định duyệt PT
+GMS --> GO : Báo cáo vận hành / hồ sơ membership
+
+GMS --> PAY : Yêu cầu thanh toán
+PAY --> GMS : Kết quả thanh toán
+
+GMS --> SMS : Nội dung SMS
+GMS --> QR : Yêu cầu sinh/xác thực QR
+QR --> GMS : Kết quả QR
+TM --> GMS : Sự kiện thời gian
+
+note bottom of GMS
+  Context Diagram: 1 process duy nhất.
+  Không vẽ data store / process con.
+end note
+
+@enduml
