@@ -5,7 +5,9 @@ Mỗi UC: main flow + ≥1 alternative + ≥1 exception.
 
 | Ai | UC | File | Nhánh gợi ý |
 |----|----|------|-------------|
-| Phước | UC-05, UC-06 | `UC-05.md`, `UC-06.md` | `step4/phuoc-uc-05-06` |
-| Tuấn | UC-11, UC-12 | `UC-11.md`, `UC-12.md` | `step4/tuan-uc-11-12` |
-| Thiên | UC-08, UC-15 | `UC-08.md`, `UC-15.md` | `step4/thien-uc-08-15` |
-| Huy | UC-16, UC-17 | `UC-16.md`, `UC-17.md` | `step4/huy-uc-16-17` |
+| Phước | UC-05, UC-06 | `UC-05.md`, `UC-06.md` | `step-4` |
+| Tuấn | UC-11, UC-12 | `UC-11.md`, `UC-12.md` | `step-4` |
+| Thiên | UC-08, UC-15 | `UC-08.md`, `UC-15.md` | `step-4` |
+| Huy | UC-16, UC-17 | `UC-16.md`, `UC-17.md` | `step-4` |
+
+**Phước (#20):** fully dressed English specs for Register Membership (at Counter) + Activate Membership — main + alternatives + exceptions, BR-01…04, include/extend notes. Paste into SRS §3 when Word is free.
