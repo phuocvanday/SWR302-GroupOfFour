@@ -61,16 +61,33 @@ def add_table(doc, headers, rows):
     return table
 
 
-def try_picture(doc, path: Path, width=5.8, caption=None):
+def try_picture(doc, path: Path, width=5.8, caption=None, note=None):
+    """Insert image + Figure caption + source note. Returns True if embedded."""
     if path.exists():
         p = doc.add_paragraph()
         p.alignment = WD_ALIGN_PARAGRAPH.CENTER
         p.add_run().add_picture(str(path), width=Inches(width))
         if caption:
-            cap = doc.add_paragraph(caption)
+            cap = doc.add_paragraph()
             cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            r = cap.add_run(caption)
+            r.bold = True
+            r.italic = True
+            r.font.size = Pt(11)
+            r.font.name = "Times New Roman"
+        note_bits = [f"Source file: 03_Images/{path.name}"]
+        if note:
+            note_bits.append(note)
+        note_bits.append("Export target ≥150 dpi (assignment A.3).")
+        n = doc.add_paragraph()
+        n.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        nr = n.add_run(" · ".join(note_bits))
+        nr.italic = True
+        nr.font.size = Pt(9)
+        nr.font.color.rgb = RGBColor(0x55, 0x55, 0x55)
+        nr.font.name = "Times New Roman"
         return True
-    add_note(doc, f"Image not found: {path.relative_to(ROOT)}")
+    add_note(doc, f"Chưa có ảnh — cần file: 03_Images/{path.name}" + (f" | {note}" if note else ""))
     return False
 
 
@@ -239,8 +256,12 @@ def build():
         "GMS is a new standalone product replacing paper logs / disconnected spreadsheets. "
         "It integrates Payment Gateway, SMS Service, and QR Service. Periodic jobs use actor Time/Scheduler.",
     )
-    add_p(doc, "Figure 2.1 — CD-01 Context Diagram of GMS", bold=True)
-    try_picture(doc, IMG / "CD_ContextDiagram.png", caption="Figure 2.1. CD-01 Context Diagram")
+    try_picture(
+        doc,
+        IMG / "CD_ContextDiagram.png",
+        caption="Figure 2.1 — CD-01 Context Diagram of the Gym Management System (GMS)",
+        note="1 process center; ≥5 external entities; ≥12 noun-named data flows. Owner: Phước #10. Peer note (#42): fix typo labels on VPP re-export.",
+    )
     add_p(doc, "External entities (7) and sample data flows (≥12) — from docs/step2/phuoc_cd.md:", italic=True)
     add_table(
         doc,
@@ -367,16 +388,41 @@ def build():
             ["User (abstract)", "Generalization parent", "Login/profile shared"],
         ],
     )
-    add_p(doc, "Figure 3.1 — UCD Overview", bold=True)
-    try_picture(doc, IMG / "UCD_Overview.png", width=5.5, caption="Figure 3.1. UCD-01 Overview")
-    add_p(doc, "Package diagrams", bold=True)
-    for name, file in [
-        ("UCD Membership", "UCD_Membership.png"),
-        ("UCD PT", "UCD_PT.png"),
-        ("UCD Report/Feedback", "UCD_Report_Feedback.png"),
+    try_picture(
+        doc,
+        IMG / "UCD_Overview.png",
+        width=5.5,
+        caption="Figure 3.1 — UCD-01 Use Case Overview of GMS",
+        note="Actors + high-priority UCs; generalization User←Customer/PT/Owner. Owner: Phước #15.",
+    )
+    add_p(doc, "Package diagrams (Step 3)", bold=True)
+    for fig_id, name, file, note in [
+        (
+            "3.2",
+            "UCD Membership package",
+            "UCD_Membership.png",
+            "Package Membership (UC-05…09, activate, QR). Owner: Thiên #16.",
+        ),
+        (
+            "3.3",
+            "UCD PT package",
+            "UCD_PT.png",
+            "Package PT Services (book/confirm/record/register PT). Owner: Tuấn #17.",
+        ),
+        (
+            "3.4",
+            "UCD Report / Feedback package",
+            "UCD_Report_Feedback.png",
+            "Reports + complaints (UC-21/22/25/26). Owner: Huy #18.",
+        ),
     ]:
-        add_p(doc, name, italic=True)
-        try_picture(doc, IMG / file, width=4.8)
+        try_picture(
+            doc,
+            IMG / file,
+            width=4.8,
+            caption=f"Figure {fig_id} — {name}",
+            note=note,
+        )
 
     add_p(doc, "Use case catalogue (excerpt High priority — full list docs/02_UC_List_Detailed.md)", bold=True)
     add_table(
@@ -398,16 +444,16 @@ def build():
     # Fully dressed UCs
     add_heading(doc, "3.2 Fully Dressed Use Cases (≥8)", 2)
     uc_files = [
-        ("3.2.1 UC-05 Register Membership (at Counter)", "UC-05.md", "UI_UC-05_RegisterMembership.png", "UI_UC-05_RegisterMembership_Error.png"),
-        ("3.2.2 UC-06 Activate Membership", "UC-06.md", "UI_UC-06_ActivateMembership.png", "UI_UC-06_ActivateMembership_Error.png"),
-        ("3.2.3 UC-08 Check-in by QR", "UC-08.md", "UI_UC-08_QRCheckIn.png", "UI_UC-08_QRCheckIn_Error.png"),
-        ("3.2.4 UC-11 Book a PT Package", "UC-11.md", "UI_UC11_BookPT.png", None),
-        ("3.2.5 UC-12 Confirm/Reject PT Booking", "UC-12.md", "UI_UC12_PTBooking.png", None),
-        ("3.2.6 UC-15 Record Training Session", "UC-15.md", "UI_UC-15_RecordSession.png", "UI_UC-15_RecordSession_Error.png"),
-        ("3.2.7 UC-16 Register PT Account", "UC-16.md", "UI_UC-16_RegisterPT.png", None),
-        ("3.2.8 UC-17 Approve/Reject PT", "UC-17.md", "UI_UC-17_ApprovePT.png", None),
+        ("3.2.1 UC-05 Register Membership (at Counter)", "UC-05.md", "UI_UC-05_RegisterMembership.png", "UI_UC-05_RegisterMembership_Error.png", "SCR-05", "Phước #25", "5.1a", "5.1b"),
+        ("3.2.2 UC-06 Activate Membership", "UC-06.md", "UI_UC-06_ActivateMembership.png", "UI_UC-06_ActivateMembership_Error.png", "SCR-06", "Phước #25", "5.2a", "5.2b"),
+        ("3.2.3 UC-08 Check-in by QR", "UC-08.md", "UI_UC-08_QRCheckIn.png", "UI_UC-08_QRCheckIn_Error.png", "SCR-08", "Thiên #27", "5.3a", "5.3b"),
+        ("3.2.4 UC-11 Book a PT Package", "UC-11.md", "UI_UC11_BookPT.png", None, "SCR-11", "Tuấn #26", "5.4", None),
+        ("3.2.5 UC-12 Confirm/Reject PT Booking", "UC-12.md", "UI_UC12_PTBooking.png", None, "SCR-12", "Tuấn #26", "5.5", None),
+        ("3.2.6 UC-15 Record Training Session", "UC-15.md", "UI_UC-15_RecordSession.png", "UI_UC-15_RecordSession_Error.png", "SCR-15", "Thiên #27", "5.6a", "5.6b"),
+        ("3.2.7 UC-16 Register PT Account", "UC-16.md", "UI_UC-16_RegisterPT.png", None, "SCR-16", "Huy #28", "5.7", None),
+        ("3.2.8 UC-17 Approve/Reject PT", "UC-17.md", "UI_UC-17_ApprovePT.png", None, "SCR-17", "Huy #28", "5.8", None),
     ]
-    for title, md_name, ui, ui_err in uc_files:
+    for title, md_name, ui, ui_err, scr, owner, fig_ok, fig_err in uc_files:
         add_heading(doc, title, 3)
         md_path = ROOT / "docs" / "step4" / md_name
         fields = parse_md_field_table(md_path)
@@ -456,12 +502,27 @@ def build():
                 # take first 80 lines
                 lines = [ln for ln in body.splitlines() if not ln.startswith(">")]
                 add_p(doc, "\n".join(lines[:90])[:4000])
-        add_p(doc, "Wireframe (Step 5)", bold=True)
-        try_picture(doc, IMG / ui, width=4.5)
+        add_p(doc, f"Wireframe {scr} (Step 5) — {owner}", bold=True)
+        try_picture(
+            doc,
+            IMG / ui,
+            width=4.5,
+            caption=f"Figure {fig_ok} — Wireframe {scr} (happy path) for {md_name.replace('.md','')}",
+            note=f"Low-fidelity UI · field table in docs/step5 · {owner}",
+        )
         if ui_err:
-            try_picture(doc, IMG / ui_err, width=4.2, caption="Error / exception state")
+            try_picture(
+                doc,
+                IMG / ui_err,
+                width=4.2,
+                caption=f"Figure {fig_err} — Wireframe {scr}-E (error / exception state)",
+                note=f"Maps to Exception/Alternative flows in {md_name} · {owner}",
+            )
         else:
-            add_note(doc, f"{md_name}: dedicated error PNG optional — validation described in docs/step5 field tables.")
+            add_note(
+                doc,
+                f"{scr}: chưa có PNG trạng thái lỗi riêng — validation/error mô tả trong docs/step5 (*_ui.md).",
+            )
 
     add_heading(doc, "3.3 Other use cases (brief)", 2)
     add_p(
@@ -473,20 +534,47 @@ def build():
 
     add_heading(doc, "3.4 Behaviour models — Activity & State", 2)
     add_p(doc, "AD-03 Activate Membership at counter (Phước+Thiên #32)", bold=True)
-    try_picture(doc, IMG / "AD_ActivateMembership.png", caption="Figure — AD-03")
+    try_picture(
+        doc,
+        IMG / "AD_ActivateMembership.png",
+        caption="Figure 3.5 — AD-03 Activate Membership at Counter (swimlane)",
+        note="≥3 lanes (Owner / GMS / Customer|SMS). Related UC-05/06. Owners: Phước+Thiên #32.",
+    )
     add_p(doc, "AD-02 Approve PT (Huy #31)", bold=True)
-    try_picture(doc, IMG / "AD_ApprovePT.png", caption="Figure — AD-02")
+    try_picture(
+        doc,
+        IMG / "AD_ApprovePT.png",
+        caption="Figure 3.6 — AD-02 Register & Approve Personal Trainer (swimlane)",
+        note="Lanes PT / GMS / Owner. Related UC-16/17. Owner: Huy #31.",
+    )
     add_p(doc, "AD-01 Book PT & payment (Tuấn #30)", bold=True)
+    try_picture(
+        doc,
+        IMG / "AD_BookPT.png",
+        caption="Figure 3.7 — AD-01 Book PT Package & Payment (swimlane)",
+        note="Expected file AD_BookPT.png · Related UC-11/12 · Owner: Tuấn #30.",
+    )
     add_note(
         doc,
-        "AD-01 CHƯA CÓ — issue #30 OPEN; docs/step6/tuan_ad01.md trống; thiếu 03_Images/AD_BookPT.png. "
-        "Đây là blocker bước 6 checklist #33.",
+        "AD-01 CHƯA CÓ — issue #30 OPEN; docs/step6/tuan_ad01.md trống. Blocker checklist bước 6 #33.",
     )
 
-    add_p(doc, "SMD-01 Membership & SMD-02 PT Booking (Thiên #34) — transition audit", bold=True)
+    add_p(doc, "SMD-01 Membership & SMD-02 PT Booking (Thiên #34)", bold=True)
+    try_picture(
+        doc,
+        IMG / "SMD_Membership.png",
+        caption="Figure 3.8 — SMD-01 Membership Lifecycle",
+        note="States Inactive/Active/Suspended/Expired/Cancelled + Time events. Owner: Thiên #34.",
+    )
+    try_picture(
+        doc,
+        IMG / "SMD_PTBooking.png",
+        caption="Figure 3.9 — SMD-02 PT Booking Lifecycle",
+        note="States Pending…Cancelled; Time after(24h)=BR-08. Owner: Thiên #34.",
+    )
     add_note(
         doc,
-        "PNG SMD_Membership.png / SMD_PTBooking.png chưa export từ VP. Dưới đây là bảng transition từ docs/step7/thien_smd.md.",
+        "PNG SMD chưa export từ VP — chèn bảng transition bên dưới từ docs/step7/thien_smd.md cho đến khi có hình.",
     )
     add_p(doc, "SMD-01 key transitions (UC / Time)", italic=True)
     add_table(
@@ -533,8 +621,12 @@ def build():
     # ===== 4 =====
     add_heading(doc, "4. Data Requirements", 1)
     add_heading(doc, "4.1 Logical Data Model", 2)
-    add_p(doc, "Figure 4.1 — ERD-01 Conceptual (Huy #35)", bold=True)
-    try_picture(doc, IMG / "ERD_Conceptual.png", caption="Figure 4.1. ERD-01")
+    try_picture(
+        doc,
+        IMG / "ERD_Conceptual.png",
+        caption="Figure 4.1 — ERD-01 Conceptual Data Model of GMS (≥10 entities)",
+        note="Converted/normalized from Entity Relationship Diagram1.jpg · Owner: Huy #35 · Dict: docs/step7/huy_erd.md",
+    )
     add_table(
         doc,
         ["Vision name", "Huy ERD entity"],
@@ -596,26 +688,50 @@ def build():
     # ===== 5 =====
     add_heading(doc, "5. External Interface Requirements", 1)
     add_heading(doc, "5.1 User Interfaces", 2)
-    add_p(doc, "Screen map (Step 5 wireframes)", bold=True)
-    add_table(
-        doc,
-        ["SCR", "UC", "PNG", "Owner"],
-        [
-            ["SCR-05", "UC-05", "UI_UC-05_RegisterMembership.png (+Error)", "Phước"],
-            ["SCR-06", "UC-06", "UI_UC-06_ActivateMembership.png (+Error)", "Phước"],
-            ["SCR-08", "UC-08", "UI_UC-08_QRCheckIn.png (+Error)", "Thiên"],
-            ["SCR-11", "UC-11", "UI_UC11_BookPT.png", "Tuấn"],
-            ["SCR-12", "UC-12", "UI_UC12_PTBooking.png", "Tuấn"],
-            ["SCR-15", "UC-15", "UI_UC-15_RecordSession.png (+Error)", "Thiên"],
-            ["SCR-16", "UC-16", "UI_UC-16_RegisterPT.png", "Huy"],
-            ["SCR-17", "UC-17", "UI_UC-17_ApprovePT.png", "Huy"],
-        ],
-    )
     add_p(
         doc,
         "Style: Vietnamese labels on UI; English IDs in SRS. Field/validation tables: docs/step5/*_ui.md. "
-        "Huy NFR-USAB-01: core reception tasks < 30s for new users.",
+        "Huy NFR-USAB-01: core reception tasks < 30s for new users. "
+        "Các wireframe đầy đủ cũng đã chèn cạnh từng UC ở §3.2; mục này là bản đồ + gallery tổng hợp.",
     )
+    add_p(doc, "Screen map (Step 5 wireframes)", bold=True)
+    add_table(
+        doc,
+        ["Figure", "SCR", "UC", "PNG", "Owner"],
+        [
+            ["5.1a/b", "SCR-05", "UC-05", "UI_UC-05_RegisterMembership(.png/_Error)", "Phước"],
+            ["5.2a/b", "SCR-06", "UC-06", "UI_UC-06_ActivateMembership(.png/_Error)", "Phước"],
+            ["5.3a/b", "SCR-08", "UC-08", "UI_UC-08_QRCheckIn(.png/_Error)", "Thiên"],
+            ["5.4", "SCR-11", "UC-11", "UI_UC11_BookPT.png", "Tuấn"],
+            ["5.5", "SCR-12", "UC-12", "UI_UC12_PTBooking.png", "Tuấn"],
+            ["5.6a/b", "SCR-15", "UC-15", "UI_UC-15_RecordSession(.png/_Error)", "Thiên"],
+            ["5.7", "SCR-16", "UC-16", "UI_UC-16_RegisterPT.png", "Huy"],
+            ["5.8", "SCR-17", "UC-17", "UI_UC-17_ApprovePT.png", "Huy"],
+        ],
+    )
+    add_p(doc, "UI gallery (all available wireframes)", bold=True)
+    ui_gallery = [
+        ("5.1a", "UI_UC-05_RegisterMembership.png", "SCR-05 Register Membership", "Phước"),
+        ("5.1b", "UI_UC-05_RegisterMembership_Error.png", "SCR-05-E Payment/validation error", "Phước"),
+        ("5.2a", "UI_UC-06_ActivateMembership.png", "SCR-06 Activate Membership", "Phước"),
+        ("5.2b", "UI_UC-06_ActivateMembership_Error.png", "SCR-06-E Unpaid blocked", "Phước"),
+        ("5.3a", "UI_UC-08_QRCheckIn.png", "SCR-08 Check-in by QR", "Thiên"),
+        ("5.3b", "UI_UC-08_QRCheckIn_Error.png", "SCR-08-E Invalid/expired QR", "Thiên"),
+        ("5.4", "UI_UC11_BookPT.png", "SCR-11 Book PT Package", "Tuấn"),
+        ("5.5", "UI_UC12_PTBooking.png", "SCR-12 Manage PT Booking Requests", "Tuấn"),
+        ("5.6a", "UI_UC-15_RecordSession.png", "SCR-15 Record Training Session", "Thiên"),
+        ("5.6b", "UI_UC-15_RecordSession_Error.png", "SCR-15-E Validation / no sessions", "Thiên"),
+        ("5.7", "UI_UC-16_RegisterPT.png", "SCR-16 Register PT Account", "Huy"),
+        ("5.8", "UI_UC-17_ApprovePT.png", "SCR-17 Approve/Reject PT", "Huy"),
+    ]
+    for fig, fn, title, owner in ui_gallery:
+        try_picture(
+            doc,
+            IMG / fn,
+            width=4.0,
+            caption=f"Figure {fig} — {title}",
+            note=f"Wireframe · Owner: {owner} · Also referenced under the matching UC in §3.2",
+        )
 
     add_heading(doc, "5.2 Software Interfaces", 2)
     add_p(
@@ -730,6 +846,51 @@ def build():
             ["7", "huy_erd, thien_smd, phuoc_srs_trace, ERD png"],
             ["8", "huy_nfr; thien_peer_review; tuan_peer empty"],
         ],
+    )
+
+    add_heading(doc, "Appendix F – Figure catalogue & image notes", 1)
+    add_p(
+        doc,
+        "Tất cả hình trong SRS lấy từ thư mục 03_Images/. Mỗi hình trong tài liệu có: "
+        "(1) tiêu đề Figure, (2) dòng ghi chú Source file + chủ sở hữu + liên kết UC/BR. "
+        "Yêu cầu nộp: PNG ≥ 150 dpi từ Visual Paradigm (trừ wireframe UI).",
+    )
+    add_table(
+        doc,
+        ["Figure", "File", "Type", "SRS §", "Status", "Note"],
+        [
+            ["2.1", "CD_ContextDiagram.png", "CD", "2.1", "Embedded", "Fix typo labels on re-export (#42)"],
+            ["3.1", "UCD_Overview.png", "UCD", "3.1", "Embedded", "Overview"],
+            ["3.2", "UCD_Membership.png", "UCD", "3.1", "Embedded", "Thiên"],
+            ["3.3", "UCD_PT.png", "UCD", "3.1", "Embedded", "Tuấn"],
+            ["3.4", "UCD_Report_Feedback.png", "UCD", "3.1", "Embedded", "Huy"],
+            ["3.5", "AD_ActivateMembership.png", "AD", "3.4", "Embedded", "AD-03 Phước+Thiên"],
+            ["3.6", "AD_ApprovePT.png", "AD", "3.4", "Embedded", "AD-02 Huy"],
+            ["3.7", "AD_BookPT.png", "AD", "3.4", "MISSING", "Tuấn #30 — chưa có"],
+            ["3.8", "SMD_Membership.png", "SMD", "3.4", "MISSING", "Thiên #34 — có bảng transition"],
+            ["3.9", "SMD_PTBooking.png", "SMD", "3.4", "MISSING", "Thiên #34 — có bảng transition"],
+            ["4.1", "ERD_Conceptual.png", "ERD", "4.1", "Embedded", "Huy #35"],
+            ["5.1a/b", "UI_UC-05_*", "UI", "3.2 / 5.1", "Embedded", "Phước + error state"],
+            ["5.2a/b", "UI_UC-06_*", "UI", "3.2 / 5.1", "Embedded", "Phước + error state"],
+            ["5.3a/b", "UI_UC-08_*", "UI", "3.2 / 5.1", "Embedded", "Thiên + error state"],
+            ["5.4", "UI_UC11_BookPT.png", "UI", "3.2 / 5.1", "Embedded", "Tuấn (tên file thiếu '-')"],
+            ["5.5", "UI_UC12_PTBooking.png", "UI", "3.2 / 5.1", "Embedded", "Tuấn"],
+            ["5.6a/b", "UI_UC-15_*", "UI", "3.2 / 5.1", "Embedded", "Thiên + error state"],
+            ["5.7", "UI_UC-16_RegisterPT.png", "UI", "3.2 / 5.1", "Embedded", "Huy"],
+            ["5.8", "UI_UC-17_ApprovePT.png", "UI", "3.2 / 5.1", "Embedded", "Huy"],
+        ],
+    )
+    add_p(doc, "Image notes (quy ước ghi chú dưới mỗi hình)", bold=True)
+    add_p(
+        doc,
+        "Mỗi caption gồm: Figure ID + tên sơ đồ/màn hình. Dòng xám bên dưới ghi Source file, "
+        "owner issue, UC/BR liên quan, và nhắc ≥150 dpi. Hình MISSING vẫn giữ số Figure để "
+        "đối chiếu khi thành viên bổ sung file vào 03_Images/.",
+    )
+    add_note(
+        doc,
+        "Không nhúng bản .jpg trùng nếu đã có .png cùng nội dung (tránh phình file). "
+        "Bản gốc Huy ERD: Entity Relationship Diagram1.jpg — SRS dùng ERD_Conceptual.png.",
     )
 
     doc.save(OUT)

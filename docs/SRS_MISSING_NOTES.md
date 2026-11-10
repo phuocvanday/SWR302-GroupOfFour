@@ -13,11 +13,19 @@
 
 ## Thiếu hình / export VP
 
-| # | File | Ai | Ghi chú |
-|---|------|----|---------|
-| 3 | `03_Images/SMD_Membership.png` | Thiên | Bảng transition đã có trong SRS + `thien_smd.md` |
-| 4 | `03_Images/SMD_PTBooking.png` | Thiên | Như trên |
-| 5 | Typo nhãn trên `CD_ContextDiagram.png` | Phước sửa VPP | Góp ý peer review Thiên #42 |
+| # | File | Figure trong SRS | Ai | Ghi chú |
+|---|------|----------------|----|---------|
+| 3 | `03_Images/SMD_Membership.png` | Figure 3.8 | Thiên | Bảng transition đã có trong SRS + `thien_smd.md` |
+| 4 | `03_Images/SMD_PTBooking.png` | Figure 3.9 | Thiên | Như trên |
+| 5 | Typo nhãn trên `CD_ContextDiagram.png` | Figure 2.1 | Phước sửa VPP | Góp ý peer review Thiên #42 |
+
+## Hình đã nhúng + chú thích
+
+Xem **Appendix F** trong `01_SRS_GMS.docx` (Figure catalogue). Mỗi ảnh có:
+- Caption in đậm: `Figure x.y — tên`
+- Dòng ghi chú xám: `Source file: 03_Images/... · owner · UC/BR · ≥150 dpi`
+
+UI wireframe: chèn ở **§3.2** (cạnh từng UC) **và** gallery **§5.1**.
 
 ## Nháp thành viên còn trống / chưa xác nhận
 
