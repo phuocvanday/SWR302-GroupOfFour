@@ -1,108 +1,108 @@
-# Bước 5 — Huy (UI UC-16, UC-17)
+# Step 5 — Huy (UI UC-16, UC-17)
 
-> Issue: #28 · Nhánh: `step5/huy-ui`
+> Issue: #28 · Branch: `step5/huy-ui`
 
-## Màn hình & PNG
+## Screens & PNG
 
-| UC | Tên màn hình | File PNG |
-|----|--------------|----------|
-| UC-16 | Form Đăng ký tài khoản Personal Trainer | `03_Images/UI_UC-16_RegisterPT.png` |
-| UC-17 | Màn hình Duyệt tài khoản PT (Gym Owner) | `03_Images/UI_UC-17_ApprovePT.png` |
+| UC | Screen name | PNG file |
+|----|-------------|----------|
+| UC-16 | Personal Trainer Registration Form | `03_Images/UI_UC-16_RegisterPT.png` |
+| UC-17 | PT Account Approval Screen (Gym Owner) | `03_Images/UI_UC-17_ApprovePT.png` |
 
 ---
 
-## 1. Màn hình UC-16: Form Đăng ký PT
+## 1. UC-16 screen: PT registration form
 
 ![UI UC-16 Register PT](../../03_Images/UI_UC-16_RegisterPT.png)
 
 ---
 
-## 2. Màn hình UC-17: Duyệt tài khoản PT (Gym Owner)
+## 2. UC-17 screen: PT account approval (Gym Owner)
 
 ![UI UC-17 Approve PT](../../03_Images/UI_UC-17_ApprovePT.png)
 
 ---
 
-## Bảng field (tóm tắt)
+## Field table (summary)
 
-| Màn hình | Field | Bắt buộc | Validation / lỗi |
-|----------|-------|----------|------------------|
-| UC-16 (Register PT) | Họ và tên | Có | Không rỗng, 2 - 50 ký tự |
-| UC-16 (Register PT) | Số điện thoại | Có | Đúng 10 chữ số, định dạng VN (03x, 05x, 07x, 08x, 09x), chưa tồn tại trên hệ thống |
-| UC-16 (Register PT) | Email | Có | Đúng định dạng email standard, chưa tồn tại trên hệ thống |
-| UC-16 (Register PT) | Mật khẩu | Có | Tối thiểu 8 ký tự, gồm ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt |
-| UC-16 (Register PT) | Nhập lại mật khẩu | Có | Khớp 100% với ô Mật khẩu |
-| UC-16 (Register PT) | Chuyên môn (Specialty) | Có | Đã chọn ít nhất 1 chuyên môn (Gym, Yoga, Boxing, Crossfit...) |
-| UC-16 (Register PT) | Số năm kinh nghiệm | Có | Số nguyên dương từ 0 đến 40 |
-| UC-16 (Register PT) | File Chứng chỉ / Bằng cấp | Có | Định dạng PDF/JPG/PNG, dung lượng < 5MB/file |
-| UC-17 (Approve PT) | Bộ lọc trạng thái | Không | Chọn một trong các giá trị: Tất cả, Chờ duyệt (Pending), Đã duyệt, Từ chối |
-| UC-17 (Approve PT) | Lý do từ chối | Có (khi Reject) | Bắt buộc nhập nếu bấm Từ chối, độ dài 10 - 200 ký tự |
+| Screen | Field | Required | Validation / error |
+|--------|-------|----------|------------------|
+| UC-16 (Register PT) | Full name | Yes | Not empty, 2 - 50 characters |
+| UC-16 (Register PT) | Phone number | Yes | Exactly 10 digits, valid VN format (03x, 05x, 07x, 08x, 09x), not already registered |
+| UC-16 (Register PT) | Email | Yes | Must match standard email format, not already registered |
+| UC-16 (Register PT) | Password | Yes | Minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character |
+| UC-16 (Register PT) | Confirm password | Yes | Must match the Password field exactly |
+| UC-16 (Register PT) | Specialty | Yes | At least one specialty must be selected (Gym, Yoga, Boxing, Crossfit...) |
+| UC-16 (Register PT) | Years of experience | Yes | Positive integer from 0 to 40 |
+| UC-16 (Register PT) | Certificate / Degree file | Yes | PDF/JPG/PNG format, file size < 5MB per file |
+| UC-17 (Approve PT) | Status filter | No | Select one of: All, Pending, Approved, Rejected |
+| UC-17 (Approve PT) | Rejection reason | Yes (when Reject) | Required when clicking Reject, length 10 - 200 characters |
 
 ---
 
 ## Text Wireframe Layout Reference
 
-### 1. Wireframe UC-16: Form Đăng ký PT (`UI_UC-16_RegisterPT.png`)
+### 1. Wireframe UC-16: PT registration form (`UI_UC-16_RegisterPT.png`)
 
 ```text
 +-----------------------------------------------------------------------+
-| GYM MANAGEMENT SYSTEM (GMS) - ĐĂNG KÝ TÀI KHOẢN PERSONAL TRAINER      |
+| GYM MANAGEMENT SYSTEM (GMS) - PERSONAL TRAINER ACCOUNT REGISTRATION  |
 +-----------------------------------------------------------------------+
 |                                                                       |
-|  [!] Điền đầy đủ thông tin bên dưới để gửi hồ sơ duyệt tài khoản PT.  |
+|  [!] Please fill in all details below to submit the PT approval form. |
 |                                                                       |
-|  Họ và tên (*):      [ Nguyen Van A                         ]         |
-|  Số điện thoại (*):  [ 0912345678                           ]         |
+|  Full name (*):      [ Nguyen Van A                         ]         |
+|  Phone number (*):   [ 0912345678                           ]         |
 |  Email (*):          [ pt.nguyenvana@gmail.com             ]         |
-|  Mật khẩu (*):       [ ••••••••••••                         ]         |
-|  Nhập lại MK (*):    [ ••••••••••••                         ]         |
+|  Password (*):       [ ••••••••••••                         ]         |
+|  Confirm password (*): [ ••••••••••••                         ]         |
 |                                                                       |
-|  Chuyên môn (*):     [x] Gym/Fitness  [ ] Yoga  [x] Kickboxing        |
-|  Kinh nghiệm (*):    [ 3 ] năm                                        |
+|  Specialty (*):      [x] Gym/Fitness  [ ] Yoga  [x] Kickboxing        |
+|  Experience (*):     [ 3 ] years                                       |
 |                                                                       |
-|  Tải lên chứng chỉ(*):                                                |
+|  Upload certificate(*):                                               |
 |  +-----------------------------------------------------------------+  |
 |  | [Choose File] Certificate_NASM.pdf (1.2 MB)                     |  |
 |  +-----------------------------------------------------------------+  |
 |                                                                       |
-|  Mô tả bản thân:                                                      |
+|  Personal description:                                                |
 |  +-----------------------------------------------------------------+  |
-|  | Chuyên huấn luyện giảm mỡ, tăng cơ và phục hồi chức năng...    |  |
+|  | Specialized in fat loss, muscle gain, and rehabilitation...    |  |
 |  +-----------------------------------------------------------------+  |
 |                                                                       |
-|         [ HỦY BỎ ]                       [ GỬI HỒ SƠ ĐĂNG KÝ ]        |
+|         [ CANCEL ]                     [ SUBMIT REGISTRATION ]          |
 +-----------------------------------------------------------------------+
 ```
 
-### 2. Wireframe UC-17: Duyệt tài khoản PT (`UI_UC-17_ApprovePT.png`)
+### 2. Wireframe UC-17: PT account approval (`UI_UC-17_ApprovePT.png`)
 
 ```text
 +-----------------------------------------------------------------------+
-| GYM MANAGEMENT SYSTEM - QUẢN LÝ & DUYỆT HỒ SƠ PT (GYM OWNER)          |
+| GYM MANAGEMENT SYSTEM - PT PROFILE MANAGEMENT & APPROVAL (GYM OWNER) |
 +-----------------------------------------------------------------------+
-| Dashboard | Hội viên | Đặt lịch PT | [Duyệt PT (3)] | Báo cáo | Logout|
+| Dashboard | Members | Book PT | [Approve PT (3)] | Reports | Logout | 
 +-----------------------------------------------------------------------+
 |                                                                       |
-| Danh sách hồ sơ PT chờ duyệt:                                         |
-| Tìm kiếm: [ nhập tên/SĐT... ]   Trạng thái: [ Chờ duyệt (Pending) v ]   |
+| Pending PT application list:                                          |
+| Search: [ enter name/phone... ]   Status: [ Pending v ]               |
 |                                                                       |
 | +-------------------------------------------------------------------+ |
-| | Mã PT: PT004 | Nguyễn Văn A | SĐT: 0912345678                     | |
-| | Chuyên môn: Gym/Fitness, Kickboxing | Kinh nghiệm: 3 năm          | |
-| | File chứng chỉ: [Certificate_NASM.pdf (Tải về)]                   | |
-| | Ngày đăng ký: 10/11/2026 14:30                                    | |
+| | PT ID: PT004 | Nguyen Van A | Phone: 0912345678                  | |
+| | Specialty: Gym/Fitness, Kickboxing | Experience: 3 years          | |
+| | Certificate file: [Certificate_NASM.pdf (Download)]              | |
+| | Registration date: 10/11/2026 14:30                              | |
 | |                                                                   | |
-| | [ XEM CHI TIẾT HỒ SƠ ]      [ TỪ CHỐI ]      [ CHẤP NHẬN DUYỆT ]  | |
+| | [ VIEW PROFILE ]      [ REJECT ]      [ APPROVE ]                 | |
 | +-------------------------------------------------------------------+ |
 |                                                                       |
-| Modal khi chọn Từ chối:                                               |
+| Modal when choosing Reject:                                            |
 | +-------------------------------------------------------------------+ |
-| | XÁC NHẬN TỪ CHỐI HỒ SƠ PT004                                      | |
-| | Nhập lý do từ chối (*):                                           | |
+| | CONFIRM REJECTION OF PROFILE PT004                                 | |
+| | Enter rejection reason (*):                                        | |
 | | +---------------------------------------------------------------+ | |
-| | | Chứng chỉ chưa đúng chuẩn quy định của phòng tập...           | | |
+| | | Certificate does not meet the gym's required standards...     | | |
 | | +---------------------------------------------------------------+ | |
-| |              [ HỦY ]             [ XÁC NHẬN TỪ CHỐI ]             | |
+| |              [ CANCEL ]           [ CONFIRM REJECTION ]            | |
 | +-------------------------------------------------------------------+ |
 +-----------------------------------------------------------------------+
 ```
