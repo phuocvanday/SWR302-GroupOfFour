@@ -126,7 +126,7 @@ flowchart LR
 
 ## 5. PNG đã export
 
-- [ ] `03_Images/UCD_Membership.png` *(Xuất từ `02_Models/GMS.vpp`)*
+- [x] `03_Images/UCD_Membership.png` *(draft from `02_Models/UCD-03_Membership.puml` — redraw in `GMS.vpp` for official VP export)*
 
 ---
 

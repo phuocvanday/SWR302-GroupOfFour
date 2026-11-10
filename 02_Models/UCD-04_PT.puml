@@ -1,0 +1,55 @@
+@startuml UCD-04_PT_Package
+!theme plain
+left to right direction
+skinparam shadowing false
+title UCD-04 PT Package — GMS (DRAFT for Visual Paradigm)
+
+actor "Customer" as Customer
+actor "Personal Trainer" as PT
+actor "Gym Owner" as Owner
+actor "Payment Gateway" as Pay
+actor "SMS Service" as SMS
+
+rectangle "GMS — PT Package" {
+  usecase "View PT Profiles" as UC10
+  usecase "Book PT Package\n----\nextension points\nPromoApplication" as UC11
+  usecase "Confirm/Reject PT Booking" as UC12
+  usecase "Create Training Schedule" as UC13
+  usecase "View Training Schedule" as UC14
+  usecase "Record Training Session" as UC15
+  usecase "Register PT Account" as UC16
+  usecase "Approve PT Account" as UC17
+  usecase "Manage PT Packages" as UC18
+  usecase "Cancel PT Booking" as UC24
+  usecase "Process Payment" as UCPay
+  usecase "Apply Promo Code" as UCPromo
+}
+
+Customer --> UC10
+Customer --> UC11
+Customer --> UC14
+Customer --> UC24
+PT --> UC12
+PT --> UC13
+PT --> UC14
+PT --> UC15
+PT --> UC16
+PT --> UC18
+Owner --> UC17
+Pay --> UCPay
+SMS --> UC11
+SMS --> UC12
+SMS --> UC13
+SMS --> UC17
+SMS --> UC24
+
+UC11 ..> UCPay : <<include>>
+UC24 ..> UCPay : <<include>>
+UCPromo ..> UC11 : <<extend>>\n(customer has promo code)\nat PromoApplication
+
+note as N1
+  Confirm/Reject = alternative flows in UC-12
+  (NOT <<extend>>)
+end note
+
+@enduml

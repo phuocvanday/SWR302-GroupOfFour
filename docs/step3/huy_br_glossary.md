@@ -36,7 +36,8 @@
 
 ## UCD Report / Feedback (Use Case Diagram Package)
 
-- **PNG:** `03_Images/UCD_Report_Feedback.png`
+- **PNG:** `03_Images/UCD_Report_Feedback.png` *(draft available; redraw in `GMS.vpp` for official VP export)*
+- **Source draft:** `02_Models/UCD-05_Report_Feedback.puml`
 - **Notes:**
   - The diagram includes **Gym Owner** as the main actor interacting directly with the use cases: `UC-21: Generate Reports`, `UC-22: Export Excel Report`, `UC-24: View Dashboard`, and `UC-26: Process Feedback`.
   - The **Customer** and **PT** actors interact with `UC-25: Send Feedback / Complaint`.
