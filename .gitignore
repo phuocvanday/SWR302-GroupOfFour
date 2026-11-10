@@ -4,3 +4,7 @@
 *.vpp.bak*
 ~$*
 
+
+# Unpacked submission folder (keep .zip only)
+GroupOfFour_SWR302_Assignment/
+
