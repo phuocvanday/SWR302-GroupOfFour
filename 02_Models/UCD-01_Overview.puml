@@ -29,10 +29,16 @@ rectangle "GMS" {
 
   ' --- Membership ---
   usecase "View Membership Packages" as UC04
-  usecase "Register Membership\n(at Counter)" as UC05
+  usecase "Register Membership\n(at Counter)" as UC05 {
+    extension points
+      PromoApplication
+  }
   usecase "Activate Membership" as UC06
   usecase "View Membership QR" as UC07
-  usecase "Check-in by QR" as UC08
+  usecase "Check-in by QR" as UC08 {
+    extension points
+      ManualEntry
+  }
   usecase "Check-out by QR" as UC09
   usecase "Renew Membership" as UC20
   usecase "Manage Membership Packages" as UC23
@@ -40,7 +46,10 @@ rectangle "GMS" {
 
   ' --- PT ---
   usecase "View PT Profiles" as UC10
-  usecase "Book PT Package" as UC11
+  usecase "Book PT Package" as UC11 {
+    extension points
+      PromoApplication
+  }
   usecase "Confirm/Reject PT Booking" as UC12
   usecase "Create Training Schedule" as UC13
   usecase "View Training Schedule" as UC14
@@ -137,18 +146,22 @@ UC06 ..> UCQRGen : <<include>>
 UC08 ..> UCQRVal : <<include>>
 UC09 ..> UCQRVal : <<include>>
 
-' ========== EXTEND (≥2) ==========
+' ========== EXTEND (≥2) — with condition + extension point ==========
 ' Arrow: extending UC ..> base UC : <<extend>>
-UCManual ..> UC08 : <<extend>>
-UCPromo ..> UC05 : <<extend>>
-UCPromo ..> UC11 : <<extend>>
+UCManual ..> UC08 : <<extend>>\n{camera cannot scan}\nat ManualEntry
+UCPromo ..> UC05 : <<extend>>\n{customer has promo code}\nat PromoApplication
+UCPromo ..> UC11 : <<extend>>\n{customer has promo code}\nat PromoApplication
 
 note as N1
   **Rubric check**
   - Actor generalization: User ← Customer, PT, Owner
   - <<include>> ≥ 2 (Payment, Generate QR, Validate QR)
-  - <<extend>> ≥ 2 (Manual code, Promo code)
+  - <<extend>> ≥ 2 + **named extension points**
   - Confirm/Reject PT Booking = **alternative flows** (NOT extend)
+  **Extension points (fill in VP oval compartment)**
+  - Check-in by QR → ManualEntry
+  - Register Membership → PromoApplication
+  - Book PT Package → PromoApplication
 end note
 
 @enduml

@@ -41,8 +41,21 @@
 | `<<include>>` | Book PT Package, Renew, Cancel PT Booking, Register Membership | Process Payment | Always needed when money moves |
 | `<<include>>` | Activate Membership | Generate QR Code | Always create QR |
 | `<<include>>` | Check-in / Check-out | Validate QR Code | Always validate |
-| `<<extend>>` | Enter Code Manually | Check-in by QR | Optional when camera fails |
-| `<<extend>>` | Apply Promo Code | Register Membership / Book PT Package | Optional discount |
+| `<<extend>>` | Enter Code Manually | Check-in by QR | EP: **ManualEntry** — condition `{camera cannot scan}` |
+| `<<extend>>` | Apply Promo Code | Register Membership | EP: **PromoApplication** — `{customer has promo code}` |
+| `<<extend>>` | Apply Promo Code | Book PT Package | EP: **PromoApplication** — `{customer has promo code}` |
+
+### Extension points (điền nội dung trong oval base UC)
+
+Trong Visual Paradigm: chọn base UC → tab **Extension Points** → Add name (không để trống “extension points”).
+
+| Base use case | Extension point name | Meaning |
+|---------------|----------------------|---------|
+| Check-in by QR | `ManualEntry` | Cho phép nhập mã thủ công khi camera/QR lỗi |
+| Register Membership (at Counter) | `PromoApplication` | Áp mã giảm giá khi đăng ký gói |
+| Book PT Package | `PromoApplication` | Áp mã giảm giá khi book PT |
+
+Trên mũi tên `<<extend>>` ghi condition + `at <ExtensionPointName>`.
 
 **Do NOT model Confirm/Reject as extend** — those are alternative flows inside UC-12.
 
@@ -59,8 +72,9 @@
 5. Draw `<<include>>` / `<<extend>>` dashed arrows with stereotypes (**direction matters**):
    - include: base → included
    - extend: extending → base
-6. Export PNG → `03_Images/UCD_Overview.png` (replace DRAFT when done).
-7. Paste into SRS §3.1; caption: *Figure 3.1 — Use Case Overview Diagram of GMS*.
+6. Trên 3 base UC có extend: thêm **Extension Points** (`ManualEntry`, `PromoApplication`) — không để compartment trống.
+7. Export PNG → `03_Images/UCD_Overview.png` (replace DRAFT when done).
+8. Paste into SRS §3.1; caption: *Figure 3.1 — Use Case Overview Diagram of GMS*.
 
 ## Naming
 
