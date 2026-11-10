@@ -1,32 +1,32 @@
-# Bước 1 — Anh Tuấn (PT / Booking)
+# Step 1 — Tuan (PT / Booking)
 
-> Issue: #6 · Nhánh: `step1/tuan-vision`  
-> Xóa dòng hướng dẫn này khi bắt đầu viết. Tự viết nội dung — không copy nguyên nháp chung.
+> Issue: #6 · Branch: `step1/tuan-vision`
+> Remove this instruction when writing. Write original content; do not copy the shared draft without review.
 
 ## 1. User class — Personal Trainer
 
-- Mô tả:
-- Tần suất sử dụng:
-- Trình độ / kỹ năng:
-- Quyền hạn:
-- Favored? (có/không + lý do):
+- Description:
+- Usage frequency:
+- Skill level:
+- Permissions:
+- Favored? (yes/no + reason):
 
-## 2. Scope liên quan PT (Release 1)
+## 2. PT-related scope (Release 1)
 
 | In scope | Out of scope |
 |----------|--------------|
 | | |
 
-## 3. BO-03 (phải đo được)
+## 3. BO-03 (must be measurable)
 
 - Metric:
-- Cách đo:
-- Mục tiêu số:
+- Measurement method:
+- Target value:
 
-## 4. Glossary PT (4–6 thuật ngữ)
+## 4. PT glossary (4–6 terms)
 
-| Thuật ngữ | Định nghĩa |
+| Term | Definition |
 |-----------|------------|
 | | |
 
-## 5. Ghi chú / câu hỏi cho nhóm
+## 5. Notes / questions for the team

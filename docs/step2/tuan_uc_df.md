@@ -1,28 +1,28 @@
-# Bước 2 — Anh Tuấn (DF + UC domain PT)
+# Step 2 — Tuan (DF + PT-domain UCs)
 
-> Issue: #11 · Nhánh: `step2/tuan-uc-df`
+> Issue: #11 · Branch: `step2/tuan-uc-df`
 
-## Data flows (domain PT)
+## Data flows (PT domain)
 
 | ID | From | To | Data |
 |----|------|----|------|
-| DF-15 | Customer | GMS | PT, gói PT, lịch mong muốn, ghi chú |
-| DF-16 | GMS | Personal Trainer | Chi tiết booking Pending |
-| DF-17 | Personal Trainer | GMS | Confirm / Reject + lý do nếu từ chối |
-| DF-18 | GMS | SMS Service | SDT + nội dung SMS |
+| DF-15 | Customer | GMS | PT, PT package, preferred schedule, notes |
+| DF-16 | GMS | Personal Trainer | Pending booking details |
+| DF-17 | Personal Trainer | GMS | Confirm / Reject + reason if rejected |
+| DF-18 | GMS | SMS Service | Phone number + SMS content |
 | DF-19 | SMS Service | GMS | Delivered / Failed |
 
-## Use cases (domain PT)
+## Use cases (PT domain)
 
-| UC-ID | Tên | Actor chính | Mô tả ngắn |
+| UC-ID | Name | Primary actor | Short description |
 |-------|-----|-------------|------------|
-| UC-11 | Đặt gói PT | Customer | Tạo booking Pending và thanh toán |
-| UC-12 | Xác nhận / Từ chối booking PT | Personal Trainer | PT phản hồi booking trong 24 giờ |
+| UC-11 | Book a PT package | Customer | Create a Pending booking and make payment |
+| UC-12 | Confirm / Reject PT booking | Personal Trainer | The PT responds to the booking within 24 hours |
 
-## Ghi chú
+## Notes
 
-- DF-15 đến DF-19 được đối chiếu với `docs/02_Context_Diagram_DataFlows.md`.
-- UC-11 có Payment Gateway, SMS Service và Personal Trainer là secondary actor.
-- UC-12 có SMS Service và Payment Gateway là secondary actor.
-- DF-07 và DF-08 là các data flow thanh toán dùng chung; UC-11 sử dụng hai flow này.
-- Confirm và Reject là hai alternative flow trong UC-12, không phải hai use case `<<extend>>`.
+- DF-15 to DF-19 are cross-checked against `docs/02_Context_Diagram_DataFlows.md`.
+- UC-11 has Payment Gateway, SMS Service, and Personal Trainer as secondary actors.
+- UC-12 has SMS Service and Payment Gateway as secondary actors.
+- DF-07 and DF-08 are shared payment data flows; UC-11 uses both flows.
+- Confirm and Reject are alternative flows within UC-12, not two `<<extend>>` use cases.

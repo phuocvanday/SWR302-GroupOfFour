@@ -1,13 +1,13 @@
-# Bước 7 — Anh Tuấn (ERD Booking–PT–Session + review SMD-02)
+# Step 7 — Tuan (Booking–PT–Session ERD + SMD-02 review)
 
-> Issue: #36 · Nhánh: `step7/tuan-erd-review`
+> Issue: #36 · Branch: `step7/tuan-erd-review`
 
-## Entity / quan hệ bổ sung
+## Additional entities / relationships
 
 -
 
-## Review SMD-02
+## SMD-02 review
 
-- [ ] Đồng ý / cần sửa:
+- [ ] Accepted / changes required:
 
-## Ghi chú
+## Notes

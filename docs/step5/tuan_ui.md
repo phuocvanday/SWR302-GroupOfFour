@@ -1,16 +1,16 @@
-# Bước 5 — Anh Tuấn (UI UC-11, UC-12)
+# Step 5 — Tuan (UI for UC-11 and UC-12)
 
-> Issue: #26 · Nhánh: `step5/tuan-ui`
+> Issue: #26 · Branch: `step5/tuan-ui`
 
-## Màn hình & PNG
+## Screens and PNG files
 
-| UC | Tên màn hình | File PNG |
+| UC | Screen name | PNG file |
 |----|--------------|----------|
 | UC-11 | | |
 | UC-12 | | |
 
-## Bảng field (tóm tắt)
+## Field summary
 
-| Màn hình | Field | Bắt buộc | Validation / lỗi |
+| Screen | Field | Required | Validation / error |
 |----------|-------|----------|------------------|
 | | | | |

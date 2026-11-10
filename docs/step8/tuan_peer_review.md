@@ -1,13 +1,13 @@
-# Bước 8 — Anh Tuấn (Peer review mảng PT)
+# Step 8 — Tuan (PT peer review)
 
-> Issue: #41 · Nhánh: `step8/tuan-peer`
+> Issue: #41 · Branch: `step8/tuan-peer`
 
-## Đã review
+## Reviewed artifacts
 
-| Artifact | OK? | Ghi chú sửa |
+| Artifact | OK? | Required changes |
 |----------|-----|-------------|
 | UCD PT | | |
 | AD-01 | | |
-| Đặc tả UC-11/12 | | |
+| UC-11/12 specifications | | |
 
-## Kết luận
+## Conclusion

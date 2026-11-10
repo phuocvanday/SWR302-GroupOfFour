@@ -1,12 +1,12 @@
-# Bước 6 — Anh Tuấn — AD-01
+# Step 6 — Tuan — AD-01
 
-> Issue: #30 · Nhánh: `step6/tuan-ad01`
+> Issue: #30 · Branch: `step6/tuan-ad01`
 
 ## Swimlanes (≥3)
 
 -
 
-## Quyết định / nhánh song song
+## Decisions / parallel branches
 
 -
 
