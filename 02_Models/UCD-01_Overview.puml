@@ -29,16 +29,10 @@ rectangle "GMS" {
 
   ' --- Membership ---
   usecase "View Membership Packages" as UC04
-  usecase "Register Membership\n(at Counter)" as UC05 {
-    extension points
-      PromoApplication
-  }
+  usecase "Register Membership\n(at Counter)\n----\nextension points\nPromoApplication" as UC05
   usecase "Activate Membership" as UC06
   usecase "View Membership QR" as UC07
-  usecase "Check-in by QR" as UC08 {
-    extension points
-      ManualEntry
-  }
+  usecase "Check-in by QR\n----\nextension points\nManualEntry" as UC08
   usecase "Check-out by QR" as UC09
   usecase "Renew Membership" as UC20
   usecase "Manage Membership Packages" as UC23
@@ -46,10 +40,7 @@ rectangle "GMS" {
 
   ' --- PT ---
   usecase "View PT Profiles" as UC10
-  usecase "Book PT Package" as UC11 {
-    extension points
-      PromoApplication
-  }
+  usecase "Book PT Package\n----\nextension points\nPromoApplication" as UC11
   usecase "Confirm/Reject PT Booking" as UC12
   usecase "Create Training Schedule" as UC13
   usecase "View Training Schedule" as UC14
@@ -148,9 +139,9 @@ UC09 ..> UCQRVal : <<include>>
 
 ' ========== EXTEND (≥2) — with condition + extension point ==========
 ' Arrow: extending UC ..> base UC : <<extend>>
-UCManual ..> UC08 : <<extend>>\n{camera cannot scan}\nat ManualEntry
-UCPromo ..> UC05 : <<extend>>\n{customer has promo code}\nat PromoApplication
-UCPromo ..> UC11 : <<extend>>\n{customer has promo code}\nat PromoApplication
+UCManual ..> UC08 : <<extend>>\n(camera cannot scan)\nat ManualEntry
+UCPromo ..> UC05 : <<extend>>\n(customer has promo code)\nat PromoApplication
+UCPromo ..> UC11 : <<extend>>\n(customer has promo code)\nat PromoApplication
 
 note as N1
   **Rubric check**
