@@ -1,5 +1,5 @@
 # Bước 1 — Huy (Owner / Báo cáo / Ràng buộc)
-
+abcd
 > Issue: #8 · Nhánh: `step1/huy-vision`  
 > Xóa dòng hướng dẫn này khi bắt đầu viết. Tự viết nội dung — không copy nguyên nháp chung.
 
