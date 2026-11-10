@@ -1,0 +1,158 @@
+@startuml UCD-01_Overview_GMS_Full
+!theme plain
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+title Use Case Overview — GMS (FULL associations + include/extend)\nDRAFT for Visual Paradigm — English Verb + Noun
+
+' ========== ACTORS ==========
+actor "User" as User
+actor "Customer" as Customer
+actor "Personal Trainer" as PT
+actor "Gym Owner" as Owner
+actor "Payment Gateway" as Pay
+actor "SMS Service" as SMS
+actor "QR Service" as QR
+actor "Time / Scheduler" as Time
+
+' Actor generalization (≥1 required)
+User <|-- Customer
+User <|-- PT
+User <|-- Owner
+
+rectangle "GMS" {
+
+  ' --- Account ---
+  usecase "Register Customer Account" as UC01
+  usecase "Login" as UC02
+  usecase "Update Profile" as UC03
+
+  ' --- Membership ---
+  usecase "View Membership Packages" as UC04
+  usecase "Register Membership\n(at Counter)\n----\nextension points\nPromoApplication" as UC05
+  usecase "Activate Membership" as UC06
+  usecase "View Membership QR" as UC07
+  usecase "Check-in by QR\n----\nextension points\nManualEntry" as UC08
+  usecase "Check-out by QR" as UC09
+  usecase "Renew Membership" as UC20
+  usecase "Manage Membership Packages" as UC23
+  usecase "Expire Membership (auto)" as UC27
+
+  ' --- PT ---
+  usecase "View PT Profiles" as UC10
+  usecase "Book PT Package\n----\nextension points\nPromoApplication" as UC11
+  usecase "Confirm/Reject PT Booking" as UC12
+  usecase "Create Training Schedule" as UC13
+  usecase "View Training Schedule" as UC14
+  usecase "Record Training Session" as UC15
+  usecase "Register PT Account" as UC16
+  usecase "Approve PT Account" as UC17
+  usecase "Manage PT Packages" as UC18
+  usecase "Cancel PT Booking" as UC24
+
+  ' --- Notify / Report / Feedback ---
+  usecase "View Notifications" as UC19
+  usecase "Generate Operational Report" as UC21
+  usecase "Export Report to Excel" as UC22
+  usecase "Submit Complaint/Feedback" as UC25
+  usecase "Handle Complaint" as UC26
+  usecase "Remind Training Schedule" as UC28
+
+  ' --- Supporting UCs for include / extend ---
+  usecase "Process Payment" as UCPay
+  usecase "Generate QR Code" as UCQRGen
+  usecase "Validate QR Code" as UCQRVal
+  usecase "Enter Code Manually" as UCManual
+  usecase "Apply Promo Code" as UCPromo
+}
+
+' ========== ASSOCIATIONS: User (generalized) ==========
+User --> UC02
+User --> UC19
+
+' ========== ASSOCIATIONS: Customer ==========
+Customer --> UC01
+Customer --> UC03
+Customer --> UC04
+Customer --> UC07
+Customer --> UC08
+Customer --> UC09
+Customer --> UC10
+Customer --> UC11
+Customer --> UC14
+Customer --> UC20
+Customer --> UC24
+Customer --> UC25
+
+' ========== ASSOCIATIONS: Personal Trainer ==========
+PT --> UC03
+PT --> UC12
+PT --> UC13
+PT --> UC14
+PT --> UC15
+PT --> UC16
+PT --> UC18
+
+' ========== ASSOCIATIONS: Gym Owner ==========
+Owner --> UC05
+Owner --> UC06
+Owner --> UC17
+Owner --> UC20
+Owner --> UC21
+Owner --> UC22
+Owner --> UC23
+Owner --> UC26
+
+' ========== ASSOCIATIONS: Time ==========
+Time --> UC27
+Time --> UC28
+
+' ========== ASSOCIATIONS: secondary systems ==========
+Pay --> UCPay
+SMS --> UC01
+SMS --> UC06
+SMS --> UC11
+SMS --> UC12
+SMS --> UC13
+SMS --> UC17
+SMS --> UC26
+SMS --> UC27
+SMS --> UC28
+QR --> UCQRGen
+QR --> UCQRVal
+
+' Optional payment link on counter registration / renew / cancel refund
+Pay ..> UC05
+Pay ..> UC20
+Pay ..> UC12
+Pay ..> UC24
+
+' ========== INCLUDE (≥2; here ≥4) ==========
+' Arrow: base UC ..> included UC : <<include>>
+UC11 ..> UCPay : <<include>>
+UC20 ..> UCPay : <<include>>
+UC24 ..> UCPay : <<include>>
+UC05 ..> UCPay : <<include>>
+UC06 ..> UCQRGen : <<include>>
+UC08 ..> UCQRVal : <<include>>
+UC09 ..> UCQRVal : <<include>>
+
+' ========== EXTEND (≥2) — with condition + extension point ==========
+' Arrow: extending UC ..> base UC : <<extend>>
+UCManual ..> UC08 : <<extend>>\n(camera cannot scan)\nat ManualEntry
+UCPromo ..> UC05 : <<extend>>\n(customer has promo code)\nat PromoApplication
+UCPromo ..> UC11 : <<extend>>\n(customer has promo code)\nat PromoApplication
+
+note as N1
+  **Rubric check**
+  - Actor generalization: User ← Customer, PT, Owner
+  - <<include>> ≥ 2 (Payment, Generate QR, Validate QR)
+  - <<extend>> ≥ 2 + **named extension points**
+  - Confirm/Reject PT Booking = **alternative flows** (NOT extend)
+  **Extension points (fill in VP oval compartment)**
+  - Check-in by QR → ManualEntry
+  - Register Membership → PromoApplication
+  - Book PT Package → PromoApplication
+end note
+
+@enduml
