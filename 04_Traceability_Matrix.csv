@@ -1,0 +1,22 @@
+BO,UC-ID,FR-ID,BR-ID,Diagram,Screen,NFR,Test (planned)
+BO-01,UC-05,FR-05-01 Create INACTIVE membership,"BR-01, BR-02",UCD; AD-03; SMD-01; ERD-01,SCR-05,NFR-USAB-01,TC-05-01; TC-05-02
+BO-01,UC-06,FR-06-01 ACTIVE + Generate QR,"BR-02, BR-03, BR-04",AD-03; SMD-01; ERD-01; CD,SCR-06,NFR-PERF-01,TC-06-01; TC-06-02
+BO-02,UC-07,FR-07-01 Show membership QR,BR-04,UCD; ERD-01,QR view,—,TC-07-01
+BO-02,UC-08,FR-08-01 Validate QR check-in,"BR-04, BR-05",UCD; SMD-01; ERD-01,SCR-08,NFR-PERF-01,TC-08-01; TC-08-02
+BO-02,UC-09,FR-09-01 Check-out by QR,"BR-04, BR-05",UCD; ERD-01,SCR-09,NFR-PERF-01,TC-09-01
+BO-02,UC-27,FR-27-01 Auto-expire (Time),"BR-11, BR-04",SMD-01 T5/T8; CD Time,—(batch),NFR-REL-01,TC-27-01
+BO-03,UC-11,FR-11-01 Book PT + pay,"BR-06, BR-08",UCD PT; AD-01; SMD-02; ERD-01,SCR-11 / UI_UC11,NFR-SEC-01,TC-11-01; TC-11-02
+BO-03,UC-12,FR-12-01 Confirm/Reject booking,"BR-07, BR-08, BR-09",AD-01; SMD-02; ERD-01,SCR-12 / UI_UC12,—,TC-12-01; TC-12-02
+BO-03,UC-15,FR-15-01 Record training session,BR-10,UCD PT; SMD-02; ERD-01,SCR-15,NFR-USAB-01,TC-15-01
+BO-03,UC-16,FR-16-01 Register PT account,BR-07,UCD; AD-02; ERD-01,SCR-16,NFR-SEC-01,TC-16-01
+BO-03,UC-17,FR-17-01 Approve/Reject PT,BR-07,AD-02; ERD-01,SCR-17,—,TC-17-01
+BO-03,—,FR-BR08 Auto-cancel Pending after 24h (Time),BR-08,SMD-02 T4,—,—,TC-BR08-01
+BO-04,UC-21,FR-21-01 Generate operational report,—,CD; ERD-01,Report UI,NFR-PERF-01,TC-21-01
+BO-04,UC-22,FR-22-01 Export report Excel,—,CD,Report UI,—,TC-22-01
+—,UC-02,FR-02-01 Login by role,BR-01,UCD; ERD Role/Account,Login,NFR-SEC-01; NFR-SEC-02,TC-02-01
+—,UC-25/26,FR-25/26 Complaint,BR-12,UCD Feedback,Feedback UI,—,TC-25-01
+—,—,NFR-PERF-01 Response ≤1.5s avg,—,CD; UI check-in,SCR-08,NFR-PERF-01,TC-NFR-PERF-01
+—,—,NFR-SEC-01 Password hashing BCrypt,—,ERD Account,Login/Register,NFR-SEC-01,TC-NFR-SEC-01
+—,—,NFR-SEC-02 Session timeout 15 min,—,—,All SCR,NFR-SEC-02,TC-NFR-SEC-02
+—,—,NFR-USAB-01 Core task <30s,—,UI wireframes,SCR-05/08,NFR-USAB-01,TC-NFR-USAB-01
+—,—,NFR-REL-01 Daily backup,—,ERD,—,NFR-REL-01,TC-NFR-REL-01
