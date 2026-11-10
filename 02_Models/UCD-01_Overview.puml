@@ -1,0 +1,106 @@
+@startuml UCD-01_Overview_GMS
+!theme plain
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+title UCD-01 Use Case Overview — GMS\n(DRAFT for Visual Paradigm — English Verb + Noun)
+
+actor "User" as User
+actor "Customer" as Customer
+actor "Personal Trainer" as PT
+actor "Gym Owner" as Owner
+actor "Payment Gateway" as Pay
+actor "SMS Service" as SMS
+actor "QR Service" as QR
+actor "Time / Scheduler" as Time
+
+User <|-- Customer
+User <|-- PT
+User <|-- Owner
+
+rectangle "GMS" {
+  usecase "UC-01 Register Customer Account" as UC01
+  usecase "UC-02 Login" as UC02
+  usecase "UC-05 Register Membership\n(at Counter)" as UC05
+  usecase "UC-06 Activate Membership" as UC06
+  usecase "UC-07 View Membership QR" as UC07
+  usecase "UC-08 Check-in by QR" as UC08
+  usecase "UC-09 Check-out by QR" as UC09
+  usecase "UC-11 Book PT Package" as UC11
+  usecase "UC-12 Confirm/Reject\nPT Booking" as UC12
+  usecase "UC-15 Record Training Session" as UC15
+  usecase "UC-16 Register PT Account" as UC16
+  usecase "UC-17 Approve PT Account" as UC17
+  usecase "UC-20 Renew Membership" as UC20
+  usecase "UC-21 Generate Operational Report" as UC21
+  usecase "UC-23 Manage Membership Packages" as UC23
+  usecase "UC-25 Submit Complaint/Feedback" as UC25
+  usecase "UC-26 Handle Complaint" as UC26
+  usecase "UC-27 Expire Membership\n(auto)" as UC27
+  usecase "UC-19 View Notifications" as UC19
+
+  usecase "Process Payment" as UCPay
+  usecase "Generate QR Code" as UCQRGen
+  usecase "Validate QR Code" as UCQRVal
+  usecase "Enter Code Manually" as UCManual
+  usecase "Apply Promo Code" as UCPromo
+}
+
+' --- primary associations (overview: High UCs) ---
+Customer --> UC01
+User --> UC02
+User --> UC19
+Owner --> UC05
+Owner --> UC06
+Owner --> UC17
+Owner --> UC20
+Owner --> UC21
+Owner --> UC23
+Owner --> UC26
+Customer --> UC07
+Customer --> UC08
+Customer --> UC09
+Customer --> UC11
+Customer --> UC20
+Customer --> UC25
+PT --> UC12
+PT --> UC15
+PT --> UC16
+Time --> UC27
+
+Pay ..> UC11
+Pay ..> UC05
+Pay ..> UC20
+SMS ..> UC06
+SMS ..> UC11
+SMS ..> UC12
+SMS ..> UC17
+SMS ..> UC27
+QR ..> UC06
+QR ..> UC08
+QR ..> UC09
+
+' --- include / extend (rubric) ---
+UC11 ..> UCPay : <<include>>
+UC20 ..> UCPay : <<include>>
+UC06 ..> UCQRGen : <<include>>
+UC08 ..> UCQRVal : <<include>>
+UC09 ..> UCQRVal : <<include>>
+UCManual ..> UC08 : <<extend>>
+UCPromo ..> UC05 : <<extend>>
+UCPromo ..> UC11 : <<extend>>
+
+note right of UC12
+  Confirm / Reject are
+  **alternative flows**
+  inside UC-12
+  (NOT <<extend>>)
+end note
+
+note bottom of GMS
+  Overview shows High UCs + key relations.
+  Detail packages: Membership / PT / Report / Feedback
+  (draw as separate UCD diagrams in VP).
+end note
+
+@enduml
