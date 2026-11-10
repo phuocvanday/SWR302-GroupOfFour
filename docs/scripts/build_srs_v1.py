@@ -15,54 +15,155 @@ IMG = ROOT / "03_Images"
 OUT = ROOT / "01_SRS_GMS.docx"
 
 
+FONT = "Times New Roman"
+SIZE = Pt(13)
+UC_FIELDS = [
+    "UC ID and Name",
+    "Created By",
+    "Date Created",
+    "Primary Actor",
+    "Secondary Actors",
+    "Trigger",
+    "Description",
+    "Preconditions",
+    "Post conditions",
+    "Normal Flow",
+    "Alternative Flows",
+    "Exceptions",
+    "Priority",
+    "Frequency of Use",
+    "Business Rules",
+    "Other Information",
+    "Assumptions",
+]
+
+# Only Visual Paradigm exports may be embedded (no wireframe UI, no PlantUML drafts)
+VP_ALLOWED = {
+    "CD_ContextDiagram.png",
+    "UCD_Overview.png",
+    "UCD_Membership.png",  # allow when re-exported from VPP (current repo copy is draft — not inserted in build)
+    "UCD_PT.png",
+    "UCD_Report_Feedback.png",
+    "AD_ActivateMembership.png",
+    "AD_ApprovePT.png",
+    "AD_BookPT.png",
+    "SMD_Membership.png",
+    "SMD_PTBooking.png",
+    "ERD_Conceptual.png",
+}
+
+
+def _force_run_font(run, size=SIZE, bold=None, italic=None, color=None):
+    run.font.name = FONT
+    run.font.size = size
+    r = run._element
+    rPr = r.get_or_add_rPr()
+    rFonts = rPr.get_or_add_rFonts()
+    rFonts.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}ascii", FONT)
+    rFonts.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}hAnsi", FONT)
+    rFonts.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}eastAsia", FONT)
+    if bold is not None:
+        run.bold = bold
+    if italic is not None:
+        run.italic = italic
+    if color is not None:
+        run.font.color.rgb = color
+    else:
+        run.font.color.rgb = RGBColor(0, 0, 0)
+
+
 def set_doc_defaults(doc: Document) -> None:
     style = doc.styles["Normal"]
-    style.font.name = "Times New Roman"
-    style.font.size = Pt(12)
+    style.font.name = FONT
+    style.font.size = SIZE
+    style.font.color.rgb = RGBColor(0, 0, 0)
     rPr = style.element.get_or_add_rPr()
     rFonts = rPr.get_or_add_rFonts()
-    rFonts.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}ascii", "Times New Roman")
-    rFonts.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}hAnsi", "Times New Roman")
+    rFonts.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}ascii", FONT)
+    rFonts.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}hAnsi", FONT)
+    # Headings: black, Times New Roman (no theme blue)
+    sizes = {1: Pt(16), 2: Pt(14), 3: Pt(13)}
+    for level, sz in sizes.items():
+        hs = doc.styles[f"Heading {level}"]
+        hs.font.name = FONT
+        hs.font.size = sz
+        hs.font.bold = True
+        hs.font.color.rgb = RGBColor(0, 0, 0)
+        hrPr = hs.element.get_or_add_rPr()
+        hrFonts = hrPr.get_or_add_rFonts()
+        hrFonts.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}ascii", FONT)
+        hrFonts.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}hAnsi", FONT)
+        # clear theme color if present
+        color_el = hrPr.find("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}color")
+        if color_el is not None:
+            hrPr.remove(color_el)
+        from docx.oxml import OxmlElement
+        from docx.oxml.ns import qn
+
+        c = OxmlElement("w:color")
+        c.set(qn("w:val"), "000000")
+        hrPr.append(c)
 
 
 def add_heading(doc, text, level=1):
-    return doc.add_heading(text, level=level)
+    h = doc.add_heading(text, level=level)
+    for run in h.runs:
+        _force_run_font(run, size={1: Pt(16), 2: Pt(14), 3: Pt(13)}.get(level, SIZE), bold=True, color=RGBColor(0, 0, 0))
+    return h
 
 
-def add_p(doc, text="", bold=False, italic=False, size=12):
+def add_p(doc, text="", bold=False, italic=False, size=None):
     p = doc.add_paragraph()
     run = p.add_run(text)
-    run.bold = bold
-    run.italic = italic
-    run.font.size = Pt(size)
-    run.font.name = "Times New Roman"
+    sz = SIZE if size is None else (Pt(size) if isinstance(size, int) else size)
+    _force_run_font(run, size=sz, bold=bold, italic=italic)
     return p
 
 
 def add_note(doc, text):
     p = doc.add_paragraph()
     run = p.add_run("[MISSING / TODO] " + text)
-    run.bold = True
-    run.font.color.rgb = RGBColor(0xC0, 0x39, 0x2B)
-    run.font.size = Pt(11)
-    run.font.name = "Times New Roman"
+    _force_run_font(run, size=SIZE, bold=True, color=RGBColor(0xC0, 0x39, 0x2B))
     return p
+
+
+def _set_cell_font(cell):
+    for p in cell.paragraphs:
+        for run in p.runs:
+            _force_run_font(run, size=SIZE, color=RGBColor(0, 0, 0))
+        if not p.runs and p.text:
+            p.text = p.text
+            for run in p.runs:
+                _force_run_font(run, size=SIZE, color=RGBColor(0, 0, 0))
 
 
 def add_table(doc, headers, rows):
     table = doc.add_table(rows=1 + len(rows), cols=len(headers))
     table.style = "Table Grid"
     for i, h in enumerate(headers):
-        table.rows[0].cells[i].text = h
+        cell = table.rows[0].cells[i]
+        cell.text = ""
+        run = cell.paragraphs[0].add_run(h)
+        _force_run_font(run, size=SIZE, bold=True, color=RGBColor(0, 0, 0))
     for r_i, row in enumerate(rows):
         for c_i, val in enumerate(row):
-            table.rows[r_i + 1].cells[c_i].text = str(val) if val is not None else ""
+            cell = table.rows[r_i + 1].cells[c_i]
+            cell.text = ""
+            run = cell.paragraphs[0].add_run(str(val) if val is not None else "")
+            _force_run_font(run, size=SIZE, color=RGBColor(0, 0, 0))
     doc.add_paragraph()
     return table
 
 
 def try_picture(doc, path: Path, width=5.8, caption=None, note=None):
-    """Insert image + Figure caption + source note. Returns True if embedded."""
+    """Insert VP diagram only. Reject UI wireframes / PlantUML drafts."""
+    if path.name not in VP_ALLOWED:
+        add_note(
+            doc,
+            f"Không nhúng {path.name} — chỉ đính kèm sơ đồ Visual Paradigm (không wireframe UI / nháp PlantUML). "
+            + (note or ""),
+        )
+        return False
     if path.exists():
         p = doc.add_paragraph()
         p.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -71,52 +172,93 @@ def try_picture(doc, path: Path, width=5.8, caption=None, note=None):
             cap = doc.add_paragraph()
             cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
             r = cap.add_run(caption)
-            r.bold = True
-            r.italic = True
-            r.font.size = Pt(11)
-            r.font.name = "Times New Roman"
-        note_bits = [f"Source file: 03_Images/{path.name}"]
+            _force_run_font(r, size=SIZE, bold=True, italic=True)
+        note_bits = [f"Source file: 03_Images/{path.name}", "Visual Paradigm export", "≥150 dpi (A.3)"]
         if note:
-            note_bits.append(note)
-        note_bits.append("Export target ≥150 dpi (assignment A.3).")
+            note_bits.insert(1, note)
         n = doc.add_paragraph()
         n.alignment = WD_ALIGN_PARAGRAPH.CENTER
         nr = n.add_run(" · ".join(note_bits))
-        nr.italic = True
-        nr.font.size = Pt(9)
-        nr.font.color.rgb = RGBColor(0x55, 0x55, 0x55)
-        nr.font.name = "Times New Roman"
+        _force_run_font(nr, size=Pt(11), italic=True, color=RGBColor(0x33, 0x33, 0x33))
         return True
-    add_note(doc, f"Chưa có ảnh — cần file: 03_Images/{path.name}" + (f" | {note}" if note else ""))
+    add_note(doc, f"Chưa có ảnh VP — cần file: 03_Images/{path.name}" + (f" | {note}" if note else ""))
     return False
 
 
-def parse_md_field_table(path: Path) -> list[tuple[str, str]]:
-    """Parse | Field | Content | tables from UC-05 style docs."""
+def parse_md_field_table(path: Path) -> dict[str, str]:
+    """Parse Field|Content exam table into dict keyed by canonical field name."""
     if not path.exists():
-        return []
+        return {}
     text = path.read_text(encoding="utf-8")
-    rows = []
+    data: dict[str, str] = {}
     for line in text.splitlines():
         if not line.strip().startswith("|"):
             continue
         parts = [c.strip() for c in line.strip().strip("|").split("|")]
         if len(parts) < 2:
             continue
-        if parts[0].lower() in {"field", "item", "---"} or set(parts[0]) <= {"-", ":"}:
-            continue
-        if parts[0].startswith("---") or parts[1].startswith("---"):
-            continue
-        # skip summary headers like "Use case ID" in alternate templates handled below
         key = re.sub(r"\*+", "", parts[0]).strip()
-        val = parts[1]
-        if key and val and key.lower() not in {"uc", "screen", "png file"}:
-            rows.append((key, val))
+        val = parts[1].replace("<br>", " ").replace("<br/>", " ")
+        if not key or key.lower() in {"field", "item"} or set(key) <= {"-", ":"}:
+            continue
+        if parts[1].startswith("---"):
+            continue
+        data[key] = val
+    return data
+
+
+def uc_rows_for_srs(path: Path) -> list[list[str]]:
+    """Return Field|Content rows in Phước exam order for SRS."""
+    data = parse_md_field_table(path)
+    # alias map
+    aliases = {
+        "Post conditions": ["Post conditions", "Postconditions", "Post condition"],
+        "Normal Flow": ["Normal Flow", "Main success scenario"],
+        "Alternative Flows": ["Alternative Flows", "Alternative flows"],
+        "Exceptions": ["Exceptions", "Exception flows"],
+        "Secondary Actors": ["Secondary Actors", "Secondary actors"],
+        "Primary Actor": ["Primary Actor", "Primary actor"],
+        "Business Rules": ["Business Rules", "Related business rules"],
+    }
+    rows = []
+    for field in UC_FIELDS:
+        val = data.get(field, "")
+        if not val:
+            for alt in aliases.get(field, []):
+                if alt in data:
+                    val = data[alt]
+                    break
+        rows.append([field, val or "—"])
     return rows
 
 
 def read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8") if path.exists() else ""
+
+
+def finalize_fonts(doc: Document) -> None:
+    """Force black + TNR 13 on body; headings black."""
+    for p in doc.paragraphs:
+        style_name = p.style.name if p.style else ""
+        if style_name.startswith("Heading"):
+            level = int(style_name[-1]) if style_name[-1].isdigit() else 1
+            sz = {1: Pt(16), 2: Pt(14), 3: Pt(13)}.get(level, SIZE)
+            for run in p.runs:
+                _force_run_font(run, size=sz, bold=True, color=RGBColor(0, 0, 0))
+        else:
+            for run in p.runs:
+                # keep missing notes red
+                if run.text.startswith("[MISSING"):
+                    _force_run_font(run, size=SIZE, bold=True, color=RGBColor(0xC0, 0x39, 0x2B))
+                elif run.font.size is None or run.font.size < Pt(13):
+                    col = run.font.color.rgb if run.font.color and run.font.color.rgb else RGBColor(0, 0, 0)
+                    _force_run_font(run, size=SIZE, color=col if col != RGBColor(0xC0, 0x39, 0x2B) else RGBColor(0, 0, 0))
+    for table in doc.tables:
+        for row in table.rows:
+            for cell in row.cells:
+                for p in cell.paragraphs:
+                    for run in p.runs:
+                        _force_run_font(run, size=SIZE, color=RGBColor(0, 0, 0))
 
 
 def build():
@@ -156,7 +298,7 @@ def build():
                 "1.0-draft",
                 "11/11/2026",
                 "Phuoc (Leader)",
-                "Full assemble from docs/step*; placeholders for unfinished teammate items",
+                "Assemble from docs/step*; UC Field|Content sync; VP-only figures; font 13 / black headings",
             ],
             ["1.0", "", "Team", "[MISSING] Official freeze after AD-01 + SMD PNG + peer reviews"],
         ],
@@ -177,11 +319,13 @@ def build():
     add_heading(doc, "1.2 Document Conventions", 2)
     add_p(
         doc,
-        "Font: Times New Roman 12–13; IDs: BO-xx, BR-xx, UC-xx, FR-xx, NFR-<TYPE>-xx, SCR-xx, "
-        "CD/UCD/AD/SMD/ERD-xx. Priority: High / Medium / Low. Keywords: shall (mandatory), "
-        "should (recommended), may (optional). End-user UI language: Vietnamese; this SRS body: English "
-        "(team convention). Canonical Business Rules: Vision BR-01…BR-12 in §2.6 "
-        "(note: docs/step3/huy_br_glossary.md uses a different BR numbering — do not mix IDs).",
+        "Font: Times New Roman **13 pt** (body); headings black (no theme color). "
+        "IDs: BO-xx, BR-xx, UC-xx, FR-xx, NFR-<TYPE>-xx, SCR-xx, CD/UCD/AD/SMD/ERD-xx. "
+        "Priority: High / Medium / Low. Keywords: shall / should / may. "
+        "End-user UI: Vietnamese; SRS body: English. "
+        "Fully dressed UC template: two-column Field | Content table (see UC-05). "
+        "Diagrams embedded in this SRS: Visual Paradigm exports only (no wireframe UI, no PlantUML drafts). "
+        "Canonical BR: Vision BR-01…BR-12 in §2.6.",
     )
 
     add_heading(doc, "1.3 Project Scope", 2)
@@ -395,34 +539,13 @@ def build():
         caption="Figure 3.1 — UCD-01 Use Case Overview of GMS",
         note="Actors + high-priority UCs; generalization User←Customer/PT/Owner. Owner: Phước #15.",
     )
-    add_p(doc, "Package diagrams (Step 3)", bold=True)
-    for fig_id, name, file, note in [
-        (
-            "3.2",
-            "UCD Membership package",
-            "UCD_Membership.png",
-            "Package Membership (UC-05…09, activate, QR). Owner: Thiên #16.",
-        ),
-        (
-            "3.3",
-            "UCD PT package",
-            "UCD_PT.png",
-            "Package PT Services (book/confirm/record/register PT). Owner: Tuấn #17.",
-        ),
-        (
-            "3.4",
-            "UCD Report / Feedback package",
-            "UCD_Report_Feedback.png",
-            "Reports + complaints (UC-21/22/25/26). Owner: Huy #18.",
-        ),
-    ]:
-        try_picture(
-            doc,
-            IMG / file,
-            width=4.8,
-            caption=f"Figure {fig_id} — {name}",
-            note=note,
-        )
+    add_p(doc, "Package diagrams (Step 3) — Visual Paradigm only", bold=True)
+    add_note(
+        doc,
+        "Figure 3.2 UCD Membership / 3.3 UCD PT / 3.4 UCD Report-Feedback: các PNG hiện có trong repo "
+        "là nháp PlantUML (02_Models/*.puml) hoặc draft — KHÔNG nhúng vào SRS. "
+        "Cần export lại từ GMS.vpp → 03_Images/UCD_Membership.png, UCD_PT.png, UCD_Report_Feedback.png.",
+    )
 
     add_p(doc, "Use case catalogue (excerpt High priority — full list docs/02_UC_List_Detailed.md)", bold=True)
     add_table(
@@ -441,88 +564,34 @@ def build():
         ],
     )
 
-    # Fully dressed UCs
+    # Fully dressed UCs — unified Field | Content table (Phước exam template)
     add_heading(doc, "3.2 Fully Dressed Use Cases (≥8)", 2)
+    add_p(
+        doc,
+        "Mỗi UC dưới đây dùng cùng một bảng Field | Content (đồng bộ template UC-05). "
+        "Wireframe UI (Figma/Stitch/draw.io) chỉ tham chiếu đường dẫn file — không nhúng vào SRS "
+        "(SRS chỉ đính kèm sơ đồ Visual Paradigm).",
+        italic=True,
+    )
     uc_files = [
-        ("3.2.1 UC-05 Register Membership (at Counter)", "UC-05.md", "UI_UC-05_RegisterMembership.png", "UI_UC-05_RegisterMembership_Error.png", "SCR-05", "Phước #25", "5.1a", "5.1b"),
-        ("3.2.2 UC-06 Activate Membership", "UC-06.md", "UI_UC-06_ActivateMembership.png", "UI_UC-06_ActivateMembership_Error.png", "SCR-06", "Phước #25", "5.2a", "5.2b"),
-        ("3.2.3 UC-08 Check-in by QR", "UC-08.md", "UI_UC-08_QRCheckIn.png", "UI_UC-08_QRCheckIn_Error.png", "SCR-08", "Thiên #27", "5.3a", "5.3b"),
-        ("3.2.4 UC-11 Book a PT Package", "UC-11.md", "UI_UC11_BookPT.png", None, "SCR-11", "Tuấn #26", "5.4", None),
-        ("3.2.5 UC-12 Confirm/Reject PT Booking", "UC-12.md", "UI_UC12_PTBooking.png", None, "SCR-12", "Tuấn #26", "5.5", None),
-        ("3.2.6 UC-15 Record Training Session", "UC-15.md", "UI_UC-15_RecordSession.png", "UI_UC-15_RecordSession_Error.png", "SCR-15", "Thiên #27", "5.6a", "5.6b"),
-        ("3.2.7 UC-16 Register PT Account", "UC-16.md", "UI_UC-16_RegisterPT.png", None, "SCR-16", "Huy #28", "5.7", None),
-        ("3.2.8 UC-17 Approve/Reject PT", "UC-17.md", "UI_UC-17_ApprovePT.png", None, "SCR-17", "Huy #28", "5.8", None),
+        ("3.2.1 UC-05 Register Membership (at Counter)", "UC-05.md", "SCR-05", "03_Images/UI_UC-05_RegisterMembership.png"),
+        ("3.2.2 UC-06 Activate Membership", "UC-06.md", "SCR-06", "03_Images/UI_UC-06_ActivateMembership.png"),
+        ("3.2.3 UC-08 Check-in by QR", "UC-08.md", "SCR-08", "03_Images/UI_UC-08_QRCheckIn.png"),
+        ("3.2.4 UC-11 Book a PT Package", "UC-11.md", "SCR-11", "03_Images/UI_UC11_BookPT.png"),
+        ("3.2.5 UC-12 Confirm / Reject PT Booking", "UC-12.md", "SCR-12", "03_Images/UI_UC12_PTBooking.png"),
+        ("3.2.6 UC-15 Record Training Session", "UC-15.md", "SCR-15", "03_Images/UI_UC-15_RecordSession.png"),
+        ("3.2.7 UC-16 Register PT Account", "UC-16.md", "SCR-16", "03_Images/UI_UC-16_RegisterPT.png"),
+        ("3.2.8 UC-17 Approve / Reject PT", "UC-17.md", "SCR-17", "03_Images/UI_UC-17_ApprovePT.png"),
     ]
-    for title, md_name, ui, ui_err, scr, owner, fig_ok, fig_err in uc_files:
+    for title, md_name, scr, ui_path in uc_files:
         add_heading(doc, title, 3)
         md_path = ROOT / "docs" / "step4" / md_name
-        fields = parse_md_field_table(md_path)
-        # Prefer classic Field/Content pairs; if Tuấn-style multi tables, paste key sections as prose
-        classic = [(k, v) for k, v in fields if k.lower() not in {"use case id", "screen name", "png file", "uc"}]
-        if classic and any("Normal Flow" in k or "Main success" in k or "Description" in k for k, _ in classic):
-            # keep important rows only to avoid huge duplicate headers
-            keep = []
-            seen = set()
-            for k, v in classic:
-                if k in seen:
-                    continue
-                if any(
-                    x in k
-                    for x in [
-                        "UC ID",
-                        "Primary",
-                        "Secondary",
-                        "Trigger",
-                        "Description",
-                        "Goal",
-                        "Preconditions",
-                        "Precondition",
-                        "Post",
-                        "Normal",
-                        "Main success",
-                        "Alternative",
-                        "Exception",
-                        "Priority",
-                        "Business Rules",
-                        "Related business",
-                    ]
-                ):
-                    keep.append((k, v[:1500] + ("…" if len(v) > 1500 else "")))
-                    seen.add(k)
-            if keep:
-                add_table(doc, ["Field", "Content"], keep)
-            else:
-                add_p(doc, read_text(md_path)[:3500])
+        rows = uc_rows_for_srs(md_path)
+        if all(r[1] == "—" for r in rows):
+            add_note(doc, f"{md_name} incomplete or wrong template")
         else:
-            # fallback: embed markdown truncated
-            body = read_text(md_path)
-            if not body.strip() or "điền tên" in body or body.count("|") < 5:
-                add_note(doc, f"{md_name} incomplete")
-            else:
-                # take first 80 lines
-                lines = [ln for ln in body.splitlines() if not ln.startswith(">")]
-                add_p(doc, "\n".join(lines[:90])[:4000])
-        add_p(doc, f"Wireframe {scr} (Step 5) — {owner}", bold=True)
-        try_picture(
-            doc,
-            IMG / ui,
-            width=4.5,
-            caption=f"Figure {fig_ok} — Wireframe {scr} (happy path) for {md_name.replace('.md','')}",
-            note=f"Low-fidelity UI · field table in docs/step5 · {owner}",
-        )
-        if ui_err:
-            try_picture(
-                doc,
-                IMG / ui_err,
-                width=4.2,
-                caption=f"Figure {fig_err} — Wireframe {scr}-E (error / exception state)",
-                note=f"Maps to Exception/Alternative flows in {md_name} · {owner}",
-            )
-        else:
-            add_note(
-                doc,
-                f"{scr}: chưa có PNG trạng thái lỗi riêng — validation/error mô tả trong docs/step5 (*_ui.md).",
-            )
+            add_table(doc, ["Field", "Content"], rows)
+        add_p(doc, f"UI reference (not embedded): {scr} → `{ui_path}` — see docs/step5 for field tables.", italic=True)
 
     add_heading(doc, "3.3 Other use cases (brief)", 2)
     add_p(
@@ -692,46 +761,24 @@ def build():
         doc,
         "Style: Vietnamese labels on UI; English IDs in SRS. Field/validation tables: docs/step5/*_ui.md. "
         "Huy NFR-USAB-01: core reception tasks < 30s for new users. "
-        "Các wireframe đầy đủ cũng đã chèn cạnh từng UC ở §3.2; mục này là bản đồ + gallery tổng hợp.",
+        "Wireframe PNG are kept in 03_Images/ for the submission zip / appendix, but are NOT embedded "
+        "in this SRS document (only Visual Paradigm diagrams are embedded).",
     )
-    add_p(doc, "Screen map (Step 5 wireframes)", bold=True)
+    add_p(doc, "Screen map (wireframe file references — not embedded)", bold=True)
     add_table(
         doc,
-        ["Figure", "SCR", "UC", "PNG", "Owner"],
+        ["SCR", "UC", "PNG path", "Owner"],
         [
-            ["5.1a/b", "SCR-05", "UC-05", "UI_UC-05_RegisterMembership(.png/_Error)", "Phước"],
-            ["5.2a/b", "SCR-06", "UC-06", "UI_UC-06_ActivateMembership(.png/_Error)", "Phước"],
-            ["5.3a/b", "SCR-08", "UC-08", "UI_UC-08_QRCheckIn(.png/_Error)", "Thiên"],
-            ["5.4", "SCR-11", "UC-11", "UI_UC11_BookPT.png", "Tuấn"],
-            ["5.5", "SCR-12", "UC-12", "UI_UC12_PTBooking.png", "Tuấn"],
-            ["5.6a/b", "SCR-15", "UC-15", "UI_UC-15_RecordSession(.png/_Error)", "Thiên"],
-            ["5.7", "SCR-16", "UC-16", "UI_UC-16_RegisterPT.png", "Huy"],
-            ["5.8", "SCR-17", "UC-17", "UI_UC-17_ApprovePT.png", "Huy"],
+            ["SCR-05", "UC-05", "03_Images/UI_UC-05_RegisterMembership.png (+_Error)", "Phước"],
+            ["SCR-06", "UC-06", "03_Images/UI_UC-06_ActivateMembership.png (+_Error)", "Phước"],
+            ["SCR-08", "UC-08", "03_Images/UI_UC-08_QRCheckIn.png (+_Error)", "Thiên"],
+            ["SCR-11", "UC-11", "03_Images/UI_UC11_BookPT.png", "Tuấn"],
+            ["SCR-12", "UC-12", "03_Images/UI_UC12_PTBooking.png", "Tuấn"],
+            ["SCR-15", "UC-15", "03_Images/UI_UC-15_RecordSession.png (+_Error)", "Thiên"],
+            ["SCR-16", "UC-16", "03_Images/UI_UC-16_RegisterPT.png", "Huy"],
+            ["SCR-17", "UC-17", "03_Images/UI_UC-17_ApprovePT.png", "Huy"],
         ],
     )
-    add_p(doc, "UI gallery (all available wireframes)", bold=True)
-    ui_gallery = [
-        ("5.1a", "UI_UC-05_RegisterMembership.png", "SCR-05 Register Membership", "Phước"),
-        ("5.1b", "UI_UC-05_RegisterMembership_Error.png", "SCR-05-E Payment/validation error", "Phước"),
-        ("5.2a", "UI_UC-06_ActivateMembership.png", "SCR-06 Activate Membership", "Phước"),
-        ("5.2b", "UI_UC-06_ActivateMembership_Error.png", "SCR-06-E Unpaid blocked", "Phước"),
-        ("5.3a", "UI_UC-08_QRCheckIn.png", "SCR-08 Check-in by QR", "Thiên"),
-        ("5.3b", "UI_UC-08_QRCheckIn_Error.png", "SCR-08-E Invalid/expired QR", "Thiên"),
-        ("5.4", "UI_UC11_BookPT.png", "SCR-11 Book PT Package", "Tuấn"),
-        ("5.5", "UI_UC12_PTBooking.png", "SCR-12 Manage PT Booking Requests", "Tuấn"),
-        ("5.6a", "UI_UC-15_RecordSession.png", "SCR-15 Record Training Session", "Thiên"),
-        ("5.6b", "UI_UC-15_RecordSession_Error.png", "SCR-15-E Validation / no sessions", "Thiên"),
-        ("5.7", "UI_UC-16_RegisterPT.png", "SCR-16 Register PT Account", "Huy"),
-        ("5.8", "UI_UC-17_ApprovePT.png", "SCR-17 Approve/Reject PT", "Huy"),
-    ]
-    for fig, fn, title, owner in ui_gallery:
-        try_picture(
-            doc,
-            IMG / fn,
-            width=4.0,
-            caption=f"Figure {fig} — {title}",
-            note=f"Wireframe · Owner: {owner} · Also referenced under the matching UC in §3.2",
-        )
 
     add_heading(doc, "5.2 Software Interfaces", 2)
     add_p(
@@ -851,48 +898,36 @@ def build():
     add_heading(doc, "Appendix F – Figure catalogue & image notes", 1)
     add_p(
         doc,
-        "Tất cả hình trong SRS lấy từ thư mục 03_Images/. Mỗi hình trong tài liệu có: "
-        "(1) tiêu đề Figure, (2) dòng ghi chú Source file + chủ sở hữu + liên kết UC/BR. "
-        "Yêu cầu nộp: PNG ≥ 150 dpi từ Visual Paradigm (trừ wireframe UI).",
+        "Chính sách hình trong SRS: chỉ nhúng sơ đồ xuất từ Visual Paradigm (.vpp). "
+        "Không nhúng wireframe UI (Figma/Stitch/draw.io) và không nhúng nháp PlantUML. "
+        "Wireframe vẫn nằm trong 03_Images/ để nộp zip A.3 riêng.",
     )
     add_table(
         doc,
         ["Figure", "File", "Type", "SRS §", "Status", "Note"],
         [
-            ["2.1", "CD_ContextDiagram.png", "CD", "2.1", "Embedded", "Fix typo labels on re-export (#42)"],
-            ["3.1", "UCD_Overview.png", "UCD", "3.1", "Embedded", "Overview"],
-            ["3.2", "UCD_Membership.png", "UCD", "3.1", "Embedded", "Thiên"],
-            ["3.3", "UCD_PT.png", "UCD", "3.1", "Embedded", "Tuấn"],
-            ["3.4", "UCD_Report_Feedback.png", "UCD", "3.1", "Embedded", "Huy"],
-            ["3.5", "AD_ActivateMembership.png", "AD", "3.4", "Embedded", "AD-03 Phước+Thiên"],
-            ["3.6", "AD_ApprovePT.png", "AD", "3.4", "Embedded", "AD-02 Huy"],
-            ["3.7", "AD_BookPT.png", "AD", "3.4", "MISSING", "Tuấn #30 — chưa có"],
-            ["3.8", "SMD_Membership.png", "SMD", "3.4", "MISSING", "Thiên #34 — có bảng transition"],
-            ["3.9", "SMD_PTBooking.png", "SMD", "3.4", "MISSING", "Thiên #34 — có bảng transition"],
-            ["4.1", "ERD_Conceptual.png", "ERD", "4.1", "Embedded", "Huy #35"],
-            ["5.1a/b", "UI_UC-05_*", "UI", "3.2 / 5.1", "Embedded", "Phước + error state"],
-            ["5.2a/b", "UI_UC-06_*", "UI", "3.2 / 5.1", "Embedded", "Phước + error state"],
-            ["5.3a/b", "UI_UC-08_*", "UI", "3.2 / 5.1", "Embedded", "Thiên + error state"],
-            ["5.4", "UI_UC11_BookPT.png", "UI", "3.2 / 5.1", "Embedded", "Tuấn (tên file thiếu '-')"],
-            ["5.5", "UI_UC12_PTBooking.png", "UI", "3.2 / 5.1", "Embedded", "Tuấn"],
-            ["5.6a/b", "UI_UC-15_*", "UI", "3.2 / 5.1", "Embedded", "Thiên + error state"],
-            ["5.7", "UI_UC-16_RegisterPT.png", "UI", "3.2 / 5.1", "Embedded", "Huy"],
-            ["5.8", "UI_UC-17_ApprovePT.png", "UI", "3.2 / 5.1", "Embedded", "Huy"],
+            ["2.1", "CD_ContextDiagram.png", "CD", "2.1", "Embedded (VP)", "Fix typo labels on re-export (#42)"],
+            ["3.1", "UCD_Overview.png", "UCD", "3.1", "Embedded (VP)", "Overview"],
+            ["3.2", "UCD_Membership.png", "UCD", "3.1", "Not embedded", "PlantUML/draft — re-export from VPP"],
+            ["3.3", "UCD_PT.png", "UCD", "3.1", "Not embedded", "PlantUML/draft — re-export from VPP"],
+            ["3.4", "UCD_Report_Feedback.png", "UCD", "3.1", "Not embedded", "Explicit draft from .puml (Huy)"],
+            ["3.5", "AD_ActivateMembership.png", "AD", "3.4", "Embedded (VP)", "AD-03"],
+            ["3.6", "AD_ApprovePT.png", "AD", "3.4", "Embedded (VP)", "AD-02"],
+            ["3.7", "AD_BookPT.png", "AD", "3.4", "MISSING", "Tuấn #30"],
+            ["3.8", "SMD_Membership.png", "SMD", "3.4", "MISSING", "Thiên #34 — tables in §3.4"],
+            ["3.9", "SMD_PTBooking.png", "SMD", "3.4", "MISSING", "Thiên #34"],
+            ["4.1", "ERD_Conceptual.png", "ERD", "4.1", "Embedded (VP)", "Huy #35"],
+            ["—", "UI_UC-*", "Wireframe", "5.1 ref only", "Not embedded", "UI tools — file path only"],
         ],
     )
-    add_p(doc, "Image notes (quy ước ghi chú dưới mỗi hình)", bold=True)
+    add_p(doc, "Image notes", bold=True)
     add_p(
         doc,
-        "Mỗi caption gồm: Figure ID + tên sơ đồ/màn hình. Dòng xám bên dưới ghi Source file, "
-        "owner issue, UC/BR liên quan, và nhắc ≥150 dpi. Hình MISSING vẫn giữ số Figure để "
-        "đối chiếu khi thành viên bổ sung file vào 03_Images/.",
-    )
-    add_note(
-        doc,
-        "Không nhúng bản .jpg trùng nếu đã có .png cùng nội dung (tránh phình file). "
-        "Bản gốc Huy ERD: Entity Relationship Diagram1.jpg — SRS dùng ERD_Conceptual.png.",
+        "Mỗi hình VP được nhúng có caption Figure + dòng Source (file, VP export, ≥150 dpi). "
+        "Hình MISSING giữ số Figure để bổ sung sau.",
     )
 
+    finalize_fonts(doc)
     doc.save(OUT)
     print("Wrote", OUT)
 

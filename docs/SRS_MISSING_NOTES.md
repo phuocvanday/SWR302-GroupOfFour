@@ -1,8 +1,10 @@
 # SRS — phần còn thiếu / cần thành viên bổ sung
 
-> Cập nhật: 11/11/2026 · File SRS đã ghép: `01_SRS_GMS.docx` (Version **1.0-draft**)  
+> Cập nhật: 11/11/2026 · SRS: `01_SRS_GMS_v1draft.docx` (đóng Word rồi đổi tên thành `01_SRS_GMS.docx` nếu file gốc đang bị khóa)  
 > Script: `docs/scripts/build_srs_v1.py`  
-> **Chưa đóng zip lại** theo yêu cầu (chờ AD-01).
+> UC: bảng **Field | Content** đồng bộ (UC-11/12 đã chuyển cùng template). Font 13, heading đen.  
+> Hình nhúng: **chỉ Visual Paradigm** (CD, UCD Overview, AD-02/03, ERD). Không nhúng UI wireframe / PlantUML.  
+> **Chưa đóng zip** (chờ AD-01).
 
 ## Blocker chính (đúng tình trạng “mới tới bước 6”)
 
