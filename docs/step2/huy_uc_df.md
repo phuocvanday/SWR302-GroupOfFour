@@ -1,45 +1,45 @@
-# Bước 2 — Huy (DF + UC Owner / Report / Feedback / Time)
+# Step 2 — Huy (DF + UC Owner / Report / Feedback / Time)
 
-> Issue: #13 · Nhánh: `step2/huy-uc-df`
+> Issue: #13 · Branch: `step2/huy-uc-df`
 
-## 1. External Entities phụ trách (cho Context Diagram)
+## 1. External entities in charge (for the Context Diagram)
 
-| Entity Name | Loại | Mô tả tương tác |
+| Entity Name | Type | Interaction description |
 |---|---|---|
-| **Payment Gateway** | External System | Cổng thanh toán (VNPay/Momo/Stripe) xử lý giao dịch online và gửi lại xác nhận thanh toán/hoàn tiền |
-| **SMS Service** | External System | Dịch vụ gửi SMS (Twilio/Vonage) nhận nội dung từ GMS để gửi mã OTP, thông báo kích hoạt, nhắc lịch |
-| **Timer / Time Event** | Temporal Event | Động cơ đếm thời gian hệ thống tự động kích hoạt tác vụ: hết hạn membership, hủy booking tự động sau 24h |
+| **Payment Gateway** | External System | Payment gateway (VNPay/Momo/Stripe) processes online transactions and sends payment/refund confirmations back to the system |
+| **SMS Service** | External System | SMS service (Twilio/Vonage) receives content from GMS to send OTP codes, activation notifications, and schedule reminders |
+| **Timer / Time Event** | Temporal Event | Time-based trigger that automatically activates system tasks: membership expiration, automatic booking cancellation after 24 hours |
 
 ---
 
-## 2. Data flows (Luồng dữ liệu)
+## 2. Data flows
 
 | ID | From | To | Data Flow Content |
 |---|---|---|---|
-| DF-01 | PT | GMS | Thông tin đăng ký tài khoản PT (Họ tên, chứng chỉ, kinh nghiệm, chuyên môn) |
-| DF-02 | Gym Owner | GMS | Quyết định duyệt/từ chối tài khoản PT & Lý do отказ (nếu có) |
-| DF-03 | GMS | PT | Thông báo kết quả duyệt tài khoản |
-| DF-04 | Gym Owner | GMS | Tiêu chí lọc báo cáo (Khoảng thời gian, loại báo cáo doanh thu/check-in/PT) |
-| DF-05 | GMS | Gym Owner | Dữ liệu báo cáo hiển thị trên màn hình & File xuất dạng `.xlsx` |
-| DF-06 | Customer / PT | GMS | Nội dung gửi khiếu nại / phản hồi chất lượng dịch vụ |
-| DF-07 | GMS | Gym Owner | Danh sách phản hồi/khiếu nại cần tiếp nhận và xử lý |
-| DF-08 | GMS | Payment Gateway | Yêu cầu hoàn tiền (Refund request) khi PT từ chối/quá hạn 24h |
-| DF-09 | Payment Gateway | GMS | Trạng thái hoàn tiền thành công/thất bại |
-| DF-10 | GMS | SMS Service | Nội dung tin nhắn SMS cần gửi đến Customer/PT |
+| DF-01 | PT | GMS | PT account registration information (full name, certificates, experience, specialization) |
+| DF-02 | Gym Owner | GMS | Decision to approve/reject a PT account and the rejection reason (if any) |
+| DF-03 | GMS | PT | Notification of PT account approval result |
+| DF-04 | Gym Owner | GMS | Report filtering criteria (time range, report type: revenue/check-in/PT) |
+| DF-05 | GMS | Gym Owner | Report data displayed on screen and exported file in `.xlsx` format |
+| DF-06 | Customer / PT | GMS | Complaint/feedback content about service quality |
+| DF-07 | GMS | Gym Owner | List of feedback/complaints requiring review and resolution |
+| DF-08 | GMS | Payment Gateway | Refund request when PT rejects or exceeds the 24-hour response window |
+| DF-09 | Payment Gateway | GMS | Refund status: successful or failed |
+| DF-10 | GMS | SMS Service | SMS content to be sent to Customer/PT |
 
 ---
 
-## 3. Use Cases phụ trách (Đầy đủ theo Issue #13)
+## 3. Responsible use cases (complete according to Issue #13)
 
-| UC-ID | Tên Use Case | Actor chính | Mô tả ngắn |
+| UC-ID | Use Case Name | Primary Actor | Short description |
 |---|---|---|---|
-| **UC-16** | Register PT Account | Personal Trainer | PT gửi đăng ký tài khoản kèm thông tin hồ sơ năng lực lên hệ thống. |
-| **UC-17** | Approve PT Account | Gym Owner | Owner xem xét hồ sơ và phê duyệt hoặc từ chối tài khoản PT. |
-| **UC-21** | Generate Reports | Gym Owner | Hệ thống tổng hợp số liệu doanh thu, lượt check-in và buổi tập PT để hiển thị báo cáo. |
-| **UC-22** | Export Excel Report | Gym Owner | Xuất dữ liệu báo cáo vận hành ra file định dạng Excel (`.xlsx`). |
-| **UC-23** | Process Payment & Refund | Payment Gateway | Xử lý giao dịch thanh toán online và hoàn tiền tự động khi hủy booking. |
-| **UC-25** | Submit Feedback/Complaint | Customer / PT | Người dùng gửi ý kiến đóng góp hoặc khiếu nại về sự cố/buổi tập. |
-| **UC-26** | Process Complaint | Gym Owner | Owner xem danh sách, cập nhật trạng thái xử lý và phản hồi khiếu nại. |
-| **UC-28** | Auto-Cancel Pending Booking | Timer | Hệ thống tự động hủy booking và kích hoạt hoàn tiền nếu PT không phản hồi sau 24h. |
+| **UC-16** | Register PT Account | Personal Trainer | The PT submits a PT account registration with competency profile information to the system. |
+| **UC-17** | Approve PT Account | Gym Owner | The Owner reviews the profile and approves or rejects the PT account. |
+| **UC-21** | Generate Reports | Gym Owner | The system consolidates revenue, check-in, and PT training data to display reports. |
+| **UC-22** | Export Excel Report | Gym Owner | Export operational report data to an Excel file (`.xlsx`). |
+| **UC-23** | Process Payment & Refund | Payment Gateway | Handle online payment transactions and automatic refunds when bookings are canceled. |
+| **UC-25** | Submit Feedback/Complaint | Customer / PT | The user submits feedback or complaints about issues/training sessions. |
+| **UC-26** | Process Complaint | Gym Owner | The Owner views the list, updates the handling status, and responds to complaints. |
+| **UC-28** | Auto-Cancel Pending Booking | Timer | The system automatically cancels a booking and triggers a refund if the PT does not respond within 24 hours. |
 
 ---
