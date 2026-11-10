@@ -1,0 +1,56 @@
+@startuml UCD-03_Membership
+!theme plain
+left to right direction
+skinparam shadowing false
+title UCD-03 Membership Package — GMS (DRAFT for Visual Paradigm)
+
+actor "Customer" as Customer
+actor "Gym Owner" as Owner
+actor "Payment Gateway" as Pay
+actor "SMS Service" as SMS
+actor "QR Service" as QR
+actor "Time / Scheduler" as Time
+
+rectangle "GMS — Membership" {
+  usecase "View Membership Packages" as UC04
+  usecase "Register Membership\n(at Counter)\n----\nextension points\nPromoApplication" as UC05
+  usecase "Activate Membership" as UC06
+  usecase "View Membership QR" as UC07
+  usecase "Check-in by QR\n----\nextension points\nManualEntry" as UC08
+  usecase "Check-out by QR" as UC09
+  usecase "Renew Membership" as UC20
+  usecase "Manage Membership Packages" as UC23
+  usecase "Expire Membership (auto)" as UC27
+  usecase "Process Payment" as UCPay
+  usecase "Generate QR Code" as UCQRGen
+  usecase "Validate QR Code" as UCQRVal
+  usecase "Enter Code Manually" as UCManual
+  usecase "Apply Promo Code" as UCPromo
+}
+
+Customer --> UC04
+Customer --> UC07
+Customer --> UC08
+Customer --> UC09
+Customer --> UC20
+Owner --> UC05
+Owner --> UC06
+Owner --> UC20
+Owner --> UC23
+Time --> UC27
+Pay --> UCPay
+SMS --> UC06
+SMS --> UC20
+SMS --> UC27
+QR --> UCQRGen
+QR --> UCQRVal
+
+UC05 ..> UCPay : <<include>>
+UC20 ..> UCPay : <<include>>
+UC06 ..> UCQRGen : <<include>>
+UC08 ..> UCQRVal : <<include>>
+UC09 ..> UCQRVal : <<include>>
+UCManual ..> UC08 : <<extend>>\n(camera cannot scan)\nat ManualEntry
+UCPromo ..> UC05 : <<extend>>\n(customer has promo code)\nat PromoApplication
+
+@enduml

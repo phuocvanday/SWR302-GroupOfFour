@@ -1,0 +1,32 @@
+@startuml UCD-05_Report_Feedback
+!theme plain
+left to right direction
+skinparam shadowing false
+title UCD-05 Report / Feedback — GMS (DRAFT for Visual Paradigm)
+
+actor "Customer" as Customer
+actor "Gym Owner" as Owner
+actor "SMS Service" as SMS
+
+rectangle "GMS — Report & Feedback" {
+  usecase "Generate Operational Report" as UC21
+  usecase "Export Report to Excel" as UC22
+  usecase "Submit Complaint/Feedback" as UC25
+  usecase "Handle Complaint" as UC26
+}
+
+Owner --> UC21
+Owner --> UC22
+Owner --> UC26
+Customer --> UC25
+SMS --> UC26
+
+UC22 ..> UC21 : <<include>>
+
+note as N1
+  Handle Complaint processes feedback cases
+  from Submit Complaint/Feedback (workflow link;
+  model as association + BR-12, not false extend).
+end note
+
+@enduml

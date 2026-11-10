@@ -345,8 +345,8 @@ File: `03_Images/UI_UC-xx_TenManHinh.png` + bảng field + trạng thái lỗi.
 | 1    | Vision & Scope      | [#9](https://github.com/phuocvanday/SWR302-GroupOfFour/issues/9)   | ☐     |
 | 2    | CD + UC list        | [#14](https://github.com/phuocvanday/SWR302-GroupOfFour/issues/14) | ☐     |
 | 3    | UCD + BR + Glossary | [#19](https://github.com/phuocvanday/SWR302-GroupOfFour/issues/19) | ☐     |
-| 4    | Đặc tả UC           | [#24](https://github.com/phuocvanday/SWR302-GroupOfFour/issues/24) | ☐     |
-| 5    | Wireframe           | [#29](https://github.com/phuocvanday/SWR302-GroupOfFour/issues/29) | ☐     |
+| 4    | Đặc tả UC           | [#24](https://github.com/phuocvanday/SWR302-GroupOfFour/issues/24) | ☑     |
+| 5    | Wireframe           | [#29](https://github.com/phuocvanday/SWR302-GroupOfFour/issues/29) | ☑     |
 | 6    | Activity            | [#33](https://github.com/phuocvanday/SWR302-GroupOfFour/issues/33) | ☐     |
 | 7    | SMD + ERD           | [#38](https://github.com/phuocvanday/SWR302-GroupOfFour/issues/38) | ☐     |
 | 8    | NFR + nộp           | [#43](https://github.com/phuocvanday/SWR302-GroupOfFour/issues/43) | ☐     |

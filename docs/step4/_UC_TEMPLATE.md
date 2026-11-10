@@ -1,22 +1,23 @@
-# UC-XX — Tên use case
+# UC-XX — Use Case Name
 
-> Copy file này thành `UC-xx.md`. Điền đủ trước khi push.
+> Copy this file to `UC-xx.md`. Fill the **table below** (same fields as the course/exam fully dressed template). Then paste the table into SRS §3.
 
-## 1. Brief
-- Actor chính:
-- Stakeholders:
-- Trigger:
-- Precondition:
-- Postcondition (success / failure):
-
-## 2. Main success scenario
-1.
-
-## 3. Alternative flows
--
-
-## 4. Exception flows
--
-
-## 5. Special requirements / BR liên quan
--
+| Field | Content |
+|-------|---------|
+| **UC ID and Name** | UC-XX — Verb + Noun |
+| **Created By** | your-email@example.com |
+| **Date Created** | dd/mm/yyyy |
+| **Primary Actor** | |
+| **Secondary Actors** | |
+| **Trigger** | |
+| **Description** | |
+| **Preconditions** | 1. … 2. … |
+| **Post conditions** | 1. … 2. … 3. … |
+| **Normal Flow** | 1. … 2. … 3. … (Actor ↔ System steps) |
+| **Alternative Flows** | 1. … 2. … |
+| **Exceptions** | 1. … 2. … |
+| **Priority** | High / Medium / Low |
+| **Frequency of Use** | |
+| **Business Rules** | BR-xx … |
+| **Other Information** | Quality notes, related diagrams/screens |
+| **Assumptions** | |
