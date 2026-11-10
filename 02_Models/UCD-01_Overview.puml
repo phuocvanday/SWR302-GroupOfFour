@@ -3,7 +3,7 @@
 left to right direction
 skinparam packageStyle rectangle
 skinparam shadowing false
-title UCD-01 Use Case Overview — GMS (FULL associations + include/extend)\nDRAFT for Visual Paradigm — English Verb + Noun
+title Use Case Overview — GMS (FULL associations + include/extend)\nDRAFT for Visual Paradigm — English Verb + Noun
 
 ' ========== ACTORS ==========
 actor "User" as User
@@ -23,40 +23,40 @@ User <|-- Owner
 rectangle "GMS" {
 
   ' --- Account ---
-  usecase "UC-01 Register Customer Account" as UC01
-  usecase "UC-02 Login" as UC02
-  usecase "UC-03 Update Profile" as UC03
+  usecase "Register Customer Account" as UC01
+  usecase "Login" as UC02
+  usecase "Update Profile" as UC03
 
   ' --- Membership ---
-  usecase "UC-04 View Membership Packages" as UC04
-  usecase "UC-05 Register Membership\n(at Counter)" as UC05
-  usecase "UC-06 Activate Membership" as UC06
-  usecase "UC-07 View Membership QR" as UC07
-  usecase "UC-08 Check-in by QR" as UC08
-  usecase "UC-09 Check-out by QR" as UC09
-  usecase "UC-20 Renew Membership" as UC20
-  usecase "UC-23 Manage Membership Packages" as UC23
-  usecase "UC-27 Expire Membership (auto)" as UC27
+  usecase "View Membership Packages" as UC04
+  usecase "Register Membership\n(at Counter)" as UC05
+  usecase "Activate Membership" as UC06
+  usecase "View Membership QR" as UC07
+  usecase "Check-in by QR" as UC08
+  usecase "Check-out by QR" as UC09
+  usecase "Renew Membership" as UC20
+  usecase "Manage Membership Packages" as UC23
+  usecase "Expire Membership (auto)" as UC27
 
   ' --- PT ---
-  usecase "UC-10 View PT Profiles" as UC10
-  usecase "UC-11 Book PT Package" as UC11
-  usecase "UC-12 Confirm/Reject PT Booking" as UC12
-  usecase "UC-13 Create Training Schedule" as UC13
-  usecase "UC-14 View Training Schedule" as UC14
-  usecase "UC-15 Record Training Session" as UC15
-  usecase "UC-16 Register PT Account" as UC16
-  usecase "UC-17 Approve PT Account" as UC17
-  usecase "UC-18 Manage PT Packages" as UC18
-  usecase "UC-24 Cancel PT Booking" as UC24
+  usecase "View PT Profiles" as UC10
+  usecase "Book PT Package" as UC11
+  usecase "Confirm/Reject PT Booking" as UC12
+  usecase "Create Training Schedule" as UC13
+  usecase "View Training Schedule" as UC14
+  usecase "Record Training Session" as UC15
+  usecase "Register PT Account" as UC16
+  usecase "Approve PT Account" as UC17
+  usecase "Manage PT Packages" as UC18
+  usecase "Cancel PT Booking" as UC24
 
   ' --- Notify / Report / Feedback ---
-  usecase "UC-19 View Notifications" as UC19
-  usecase "UC-21 Generate Operational Report" as UC21
-  usecase "UC-22 Export Report to Excel" as UC22
-  usecase "UC-25 Submit Complaint/Feedback" as UC25
-  usecase "UC-26 Handle Complaint" as UC26
-  usecase "UC-28 Remind Training Schedule" as UC28
+  usecase "View Notifications" as UC19
+  usecase "Generate Operational Report" as UC21
+  usecase "Export Report to Excel" as UC22
+  usecase "Submit Complaint/Feedback" as UC25
+  usecase "Handle Complaint" as UC26
+  usecase "Remind Training Schedule" as UC28
 
   ' --- Supporting UCs for include / extend ---
   usecase "Process Payment" as UCPay
@@ -146,9 +146,9 @@ UCPromo ..> UC11 : <<extend>>
 note as N1
   **Rubric check**
   - Actor generalization: User ← Customer, PT, Owner
-  - <<include>> ≥ 2 (shown: Payment, Generate QR, Validate QR)
+  - <<include>> ≥ 2 (Payment, Generate QR, Validate QR)
   - <<extend>> ≥ 2 (Manual code, Promo code)
-  - UC-12 Confirm/Reject = **alternative flows** (NOT extend)
+  - Confirm/Reject PT Booking = **alternative flows** (NOT extend)
 end note
 
 @enduml

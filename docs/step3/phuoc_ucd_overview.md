@@ -64,4 +64,4 @@
 
 ## Naming
 
-English **Verb + Noun** (e.g. `Book PT Package`, not `Booking`).
+English **Verb + Noun** only — **no `UC-xx` prefix on the oval** (e.g. `Book PT Package`, not `UC-11 Book PT Package`). IDs stay in UC List / SRS text.
