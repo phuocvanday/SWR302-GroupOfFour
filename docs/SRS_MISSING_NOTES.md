@@ -1,10 +1,8 @@
 # SRS — phần còn thiếu / cần thành viên bổ sung
 
-> Cập nhật: 11/11/2026 · SRS: `01_SRS_GMS_v1draft.docx` (đóng Word rồi đổi tên thành `01_SRS_GMS.docx` nếu file gốc đang bị khóa)  
+> Cập nhật: 11/11/2026 · File SRS đã ghép: `01_SRS_GMS.docx` (Version **1.0-draft**)  
 > Script: `docs/scripts/build_srs_v1.py`  
-> UC: bảng **Field | Content** đồng bộ (UC-11/12 đã chuyển cùng template). Font 13, heading đen.  
-> Hình nhúng: **chỉ Visual Paradigm** (CD, UCD Overview, AD-02/03, ERD). Không nhúng UI wireframe / PlantUML.  
-> **Chưa đóng zip** (chờ AD-01).
+> **Chưa đóng zip lại** theo yêu cầu (chờ AD-01).
 
 ## Blocker chính (đúng tình trạng “mới tới bước 6”)
 
@@ -21,13 +19,21 @@
 | 4 | `03_Images/SMD_PTBooking.png` | Figure 3.9 | Thiên | Như trên |
 | 5 | Typo nhãn trên `CD_ContextDiagram.png` | Figure 2.1 | Phước sửa VPP | Góp ý peer review Thiên #42 |
 
-## Hình đã nhúng + chú thích
+## Hình đã nhúng (chỉ Visual Paradigm)
 
-Xem **Appendix F** trong `01_SRS_GMS.docx` (Figure catalogue). Mỗi ảnh có:
-- Caption in đậm: `Figure x.y — tên`
-- Dòng ghi chú xám: `Source file: 03_Images/... · owner · UC/BR · ≥150 dpi`
+Theo yêu cầu: **không** đính wireframe / PlantUML / nháp.
 
-UI wireframe: chèn ở **§3.2** (cạnh từng UC) **và** gallery **§5.1**.
+| Figure | File | Status |
+|--------|------|--------|
+| 2.1 | `CD_ContextDiagram.png` | Embedded |
+| 3.1 | `UCD_Overview.png` | Embedded |
+| 3.5 | `AD_ActivateMembership.png` | Embedded |
+| 3.6 | `AD_ApprovePT.png` | Embedded |
+| 4.1 | `ERD_Conceptual.png` | Embedded |
+
+**Không nhúng:** `UI_*.png`, `UCD_Membership/PT/Report_Feedback.png` (PlantUML/nháp), SMD (chưa có), AD-01 (chưa có).
+
+UC §3.2: bảng **Field \| Content** đồng bộ UC-05 (8 UC). Font body 13; heading đen.
 
 ## Nháp thành viên còn trống / chưa xác nhận
 
