@@ -10,4 +10,4 @@ Mỗi UC: main flow + ≥1 alternative + ≥1 exception.
 | Thiên | UC-08, UC-15 | `UC-08.md`, `UC-15.md` | `step-4` |
 | Huy | UC-16, UC-17 | `UC-16.md`, `UC-17.md` | `step-4` |
 
-**Phước (#20):** fully dressed English specs for Register Membership (at Counter) + Activate Membership — main + alternatives + exceptions, BR-01…04, include/extend notes. Paste into SRS §3 when Word is free.
+**Status (checklist #24):** 8 fully dressed UCs ready — UC-05, UC-06, UC-08, UC-11, UC-12, UC-15, UC-16, UC-17 (main + ≥1 alt + ≥1 exception). Leader paste into SRS §3 when Word is free.
