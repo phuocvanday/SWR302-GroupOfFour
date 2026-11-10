@@ -1,71 +1,71 @@
-# Bước 5 — Anh Tuấn (UI UC-11, UC-12)
+# BÆ°á»›c 5 â€” Anh Tuáº¥n (UI UC-11, UC-12)
 
-> Issue: #26 · Nhánh: `step5/tuan-ui`
+> Issue: #26 Â· NhÃ¡nh: `step5/tuan-ui`
 
-## Màn hình & PNG
+## MÃ n hÃ¬nh & PNG
 
-| UC | Tên màn hình | File PNG |
+| UC | TÃªn mÃ n hÃ¬nh | File PNG |
 |----|--------------|----------|
-| UC-11 | Book a PT Package | `03_Images/UI_UC11.jpg` |
-| UC-12 | Manage PT Booking Requests | `03_Images/UI_UC12.jpg` |
+| UC-11 | Book a PT Package | `03_Images/UI_UC11_BookPT.png` |
+| UC-12 | Manage PT Booking Requests | `03_Images/UI_UC12_PTBooking.png` |
 
-### Trạng thái file ảnh
+### Tráº¡ng thÃ¡i file áº£nh
 
-- UC-11: `03_Images/UI_UC11.jpg` — ảnh UI đã lưu, kích thước 1342 × 1600 px.
-- UC-12: `03_Images/UI_UC12.jpg` — ảnh UI đã lưu, kích thước 1080 × 1600 px.
-- Hai ảnh dùng cùng phong cách giao diện GMS PULSE: nền sáng, thẻ nội dung bo góc, màu chủ đạo xanh teal và bố cục desktop.
+- UC-11: `03_Images/UI_UC11_BookPT.png` â€” áº£nh UI Ä‘Ã£ lÆ°u, kÃ­ch thÆ°á»›c 1342 Ã— 1600 px.
+- UC-12: `03_Images/UI_UC12_PTBooking.png` â€” áº£nh UI Ä‘Ã£ lÆ°u, kÃ­ch thÆ°á»›c 1080 Ã— 1600 px.
+- Hai áº£nh dÃ¹ng cÃ¹ng phong cÃ¡ch giao diá»‡n GMS PULSE: ná»n sÃ¡ng, tháº» ná»™i dung bo gÃ³c, mÃ u chá»§ Ä‘áº¡o xanh teal vÃ  bá»‘ cá»¥c desktop.
 
-### Quyết định thiết kế UI
+### Quyáº¿t Ä‘á»‹nh thiáº¿t káº¿ UI
 
-1. UC-11 dùng bố cục nhiều bước: `Select PT` → `Select Package` → `Schedule` → `Promotion` → `Order Summary` → `Payment`.
-2. UC-12 dùng màn hình quản lý booking một trang, có danh sách và phần chi tiết.
-3. Payment method hiển thị các lựa chọn cụ thể: `VNPay`, `MoMo`, `Credit Card`.
-4. Rejection reason dùng dropdown lý do có sẵn và lựa chọn `Other` để nhập thêm.
-5. UC-12 hiển thị countdown/thời hạn phản hồi 24 giờ, ví dụ: `18 hours remaining`.
-6. Tên màn hình giữ là `Book a PT Package` và `Manage PT Booking Requests`.
+1. UC-11 dÃ¹ng bá»‘ cá»¥c nhiá»u bÆ°á»›c: `Select PT` â†’ `Select Package` â†’ `Schedule` â†’ `Promotion` â†’ `Order Summary` â†’ `Payment`.
+2. UC-12 dÃ¹ng mÃ n hÃ¬nh quáº£n lÃ½ booking má»™t trang, cÃ³ danh sÃ¡ch vÃ  pháº§n chi tiáº¿t.
+3. Payment method hiá»ƒn thá»‹ cÃ¡c lá»±a chá»n cá»¥ thá»ƒ: `VNPay`, `MoMo`, `Credit Card`.
+4. Rejection reason dÃ¹ng dropdown lÃ½ do cÃ³ sáºµn vÃ  lá»±a chá»n `Other` Ä‘á»ƒ nháº­p thÃªm.
+5. UC-12 hiá»ƒn thá»‹ countdown/thá»i háº¡n pháº£n há»“i 24 giá», vÃ­ dá»¥: `18 hours remaining`.
+6. TÃªn mÃ n hÃ¬nh giá»¯ lÃ  `Book a PT Package` vÃ  `Manage PT Booking Requests`.
 
-## Bảng field (tóm tắt)
+## Báº£ng field (tÃ³m táº¯t)
 
-| Màn hình | Field | Bắt buộc | Validation / lỗi |
+| MÃ n hÃ¬nh | Field | Báº¯t buá»™c | Validation / lá»—i |
 |----------|-------|----------|------------------|
-| UC-11 — Book PT Package | PT / package | Có | Phải chọn PT đã Approved và package đang hoạt động |
-| UC-11 — Book PT Package | Preferred date/time | Có | Không được ở quá khứ; phải nằm trong lịch cho phép |
-| UC-11 — Book PT Package | Note | Không | Tối đa 500 ký tự |
-| UC-11 — Book PT Package | Promotion code | Không | Mã phải hợp lệ, còn hạn và áp dụng được |
-| UC-11 — Book PT Package | Payment method | Có | Phải được Payment Gateway hỗ trợ |
-| UC-12 — Booking detail | Decision | Có | Chọn Confirm hoặc Reject |
-| UC-12 — Booking detail | Rejection reason | Có khi Reject | Không được để trống; tối đa 500 ký tự |
+| UC-11 â€” Book PT Package | PT / package | CÃ³ | Pháº£i chá»n PT Ä‘Ã£ Approved vÃ  package Ä‘ang hoáº¡t Ä‘á»™ng |
+| UC-11 â€” Book PT Package | Preferred date/time | CÃ³ | KhÃ´ng Ä‘Æ°á»£c á»Ÿ quÃ¡ khá»©; pháº£i náº±m trong lá»‹ch cho phÃ©p |
+| UC-11 â€” Book PT Package | Note | KhÃ´ng | Tá»‘i Ä‘a 500 kÃ½ tá»± |
+| UC-11 â€” Book PT Package | Promotion code | KhÃ´ng | MÃ£ pháº£i há»£p lá»‡, cÃ²n háº¡n vÃ  Ã¡p dá»¥ng Ä‘Æ°á»£c |
+| UC-11 â€” Book PT Package | Payment method | CÃ³ | Pháº£i Ä‘Æ°á»£c Payment Gateway há»— trá»£ |
+| UC-12 â€” Booking detail | Decision | CÃ³ | Chá»n Confirm hoáº·c Reject |
+| UC-12 â€” Booking detail | Rejection reason | CÃ³ khi Reject | KhÃ´ng Ä‘Æ°á»£c Ä‘á»ƒ trá»‘ng; tá»‘i Ä‘a 500 kÃ½ tá»± |
 
-## Gợi ý bố cục wireframe
+## Gá»£i Ã½ bá»‘ cá»¥c wireframe
 
-### UC-11 — Book a PT Package
+### UC-11 â€” Book a PT Package
 
-- Header: `Gym Management System`, Customer navigation, và tiêu đề màn hình.
-- Step 1: chọn PT, hiển thị tên, hồ sơ tóm tắt và trạng thái Approved.
-- Step 2: chọn package, số buổi, thời hạn và giá.
-- Schedule: chọn preferred date/time và nhập note.
-- Promotion: nhập promotion code và hiển thị kết quả validation.
-- Order summary: PT, package, giá gốc, giảm giá, tổng tiền và payment method.
-- Actions: `Cancel` và `Pay & Confirm Booking`.
-- Thông báo lỗi phải hiển thị gần field bị lỗi; không cho submit khi thiếu field bắt buộc.
-- Ảnh hiện tại thể hiện trạng thái thanh toán thành công tạo booking `Pending` và gửi yêu cầu đến Personal Trainer.
+- Header: `Gym Management System`, Customer navigation, vÃ  tiÃªu Ä‘á» mÃ n hÃ¬nh.
+- Step 1: chá»n PT, hiá»ƒn thá»‹ tÃªn, há»“ sÆ¡ tÃ³m táº¯t vÃ  tráº¡ng thÃ¡i Approved.
+- Step 2: chá»n package, sá»‘ buá»•i, thá»i háº¡n vÃ  giÃ¡.
+- Schedule: chá»n preferred date/time vÃ  nháº­p note.
+- Promotion: nháº­p promotion code vÃ  hiá»ƒn thá»‹ káº¿t quáº£ validation.
+- Order summary: PT, package, giÃ¡ gá»‘c, giáº£m giÃ¡, tá»•ng tiá»n vÃ  payment method.
+- Actions: `Cancel` vÃ  `Pay & Confirm Booking`.
+- ThÃ´ng bÃ¡o lá»—i pháº£i hiá»ƒn thá»‹ gáº§n field bá»‹ lá»—i; khÃ´ng cho submit khi thiáº¿u field báº¯t buá»™c.
+- áº¢nh hiá»‡n táº¡i thá»ƒ hiá»‡n tráº¡ng thÃ¡i thanh toÃ¡n thÃ nh cÃ´ng táº¡o booking `Pending` vÃ  gá»­i yÃªu cáº§u Ä‘áº¿n Personal Trainer.
 
-### UC-12 — Manage PT Booking Requests
+### UC-12 â€” Manage PT Booking Requests
 
-- Header: `Gym Management System`, PT navigation, và tiêu đề quản lý booking.
-- Bộ lọc: Pending, Confirmed, Rejected.
-- Mỗi booking hiển thị booking ID, Customer, package, preferred time, thời điểm tạo và thời hạn phản hồi 24 giờ.
-- Chi tiết booking hiển thị note của Customer và payment status.
-- Actions: `Confirm` và `Reject`.
-- Khi chọn `Reject`, hiển thị trường `Rejection reason` bắt buộc.
-- Sau khi xử lý, hiển thị trạng thái mới và thông báo kết quả.
-- Ảnh hiện tại hiển thị countdown phản hồi, trạng thái thanh toán `Paid`, nút `Confirm Booking`, nút `Reject Booking` và form rejection reason.
+- Header: `Gym Management System`, PT navigation, vÃ  tiÃªu Ä‘á» quáº£n lÃ½ booking.
+- Bá»™ lá»c: Pending, Confirmed, Rejected.
+- Má»—i booking hiá»ƒn thá»‹ booking ID, Customer, package, preferred time, thá»i Ä‘iá»ƒm táº¡o vÃ  thá»i háº¡n pháº£n há»“i 24 giá».
+- Chi tiáº¿t booking hiá»ƒn thá»‹ note cá»§a Customer vÃ  payment status.
+- Actions: `Confirm` vÃ  `Reject`.
+- Khi chá»n `Reject`, hiá»ƒn thá»‹ trÆ°á»ng `Rejection reason` báº¯t buá»™c.
+- Sau khi xá»­ lÃ½, hiá»ƒn thá»‹ tráº¡ng thÃ¡i má»›i vÃ  thÃ´ng bÃ¡o káº¿t quáº£.
+- áº¢nh hiá»‡n táº¡i hiá»ƒn thá»‹ countdown pháº£n há»“i, tráº¡ng thÃ¡i thanh toÃ¡n `Paid`, nÃºt `Confirm Booking`, nÃºt `Reject Booking` vÃ  form rejection reason.
 
-## Liên hệ với đặc tả Use Case
+## LiÃªn há»‡ vá»›i Ä‘áº·c táº£ Use Case
 
-Wireframe phải đối chiếu với các file fully dressed:
+Wireframe pháº£i Ä‘á»‘i chiáº¿u vá»›i cÃ¡c file fully dressed:
 
 - `docs/step4/UC-11.md`
 - `docs/step4/UC-12.md`
 
-Các field và trạng thái trên UI phải hỗ trợ main flow, alternative flows và exceptions đã mô tả trong hai file này.
+CÃ¡c field vÃ  tráº¡ng thÃ¡i trÃªn UI pháº£i há»— trá»£ main flow, alternative flows vÃ  exceptions Ä‘Ã£ mÃ´ táº£ trong hai file nÃ y.
