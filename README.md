@@ -1,4 +1,4 @@
-# SWR302 — Gym Management System (GMS)
+﻿# SWR302 — Gym Management System (GMS)
 
 **Hướng dẫn cả nhóm:** [`HUONG_DAN_NHOM.md`](./HUONG_DAN_NHOM.md)
 
@@ -11,4 +11,5 @@
 
 **Thành viên / GitHub:** Phước `@phuocvanday` · Tuấn `@teafromhand-vn` · Thiên `@ngthien05` · Huy `@Huyd06`
 
-**Tiến độ:** Bước 0 → Bước 1.
+**Tiến độ:** Bước 0 → Bước 1.  
+**Git:** một nhánh / bước (`step-0` … `step-8`) → xong checklist thì merge vào `main` (xem `HUONG_DAN_NHOM.md` §4.2).

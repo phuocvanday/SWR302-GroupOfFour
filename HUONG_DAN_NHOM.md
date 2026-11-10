@@ -27,8 +27,8 @@
 
 1. Mở **[Việc của tôi](https://github.com/phuocvanday/SWR302-GroupOfFour/issues/assigned/)** (đăng nhập đúng tài khoản GitHub của mình).
 2. Làm issue **Bước 0** trước (setup), rồi **Bước 1**.
-3. Mỗi lần xong: **commit + push** → **đóng issue** trên GitHub.
-4. Khi cả nhóm xong phần cá nhân: đóng issue `[Checklist nhóm]` của bước đó → mới sang bước sau.
+3. Commit trên nhánh **`step-0` / `step-1`** (một nhánh / bước — xem §4.2), rồi **đóng issue**.
+4. Khi cả nhóm xong: đóng issue `[Checklist nhóm]` → Leader **merge vào `main`** → mới sang bước sau.
 
 ### Tài khoản GitHub đã gán issue
 
@@ -119,24 +119,66 @@ git pull
 
 Mở folder trong Cursor / VS Code. Cài **Visual Paradigm Community**.
 
-### 4.2 Làm 1 issue như thế nào?
+### 4.2 Chiến lược nhánh (bắt buộc theo nhóm)
 
-1. Mở issue được **assign** cho mình → đọc checklist trong issue.
-2. `git pull` trước khi sửa.
-3. Làm phần của mình (file nháp trong `docs/stepN/` hoặc sơ đồ VP).
-4. **Thông báo nhóm** trước khi sửa `01_SRS_GMS.docx` / Excel (tránh ghi đè).
-5. Commit + push:
+**Một nhánh cho một bước** — không tạo nhánh theo từng issue / từng người sống dài (dễ rối).
+
+| Loại | Tên nhánh | Ai dùng |
+|------|-----------|---------|
+| Chính | `main` | Bản đã chốt từng bước (sau khi đóng checklist nhóm) |
+| Theo bước | `step-0` … `step-8` | **Cả 4 người** commit phần mình vào **cùng** nhánh bước đang làm |
+
+**Không làm:** nhánh kiểu `step1/huy-vision`, `step2/tuan-uc-df`… (đã bỏ trên remote).
+
+#### Bắt đầu một bước (Leader tạo 1 lần)
 
 ```bash
+git checkout main
+git pull
+git checkout -b step-1
+git push -u origin step-1
+```
+
+(Đổi `step-1` thành `step-2` … khi sang bước mới. Bước 0 dùng `step-0`.)
+
+#### Thành viên làm việc trên nhánh bước
+
+```bash
+git fetch
+git checkout step-1
+git pull
+# ... sửa file của mình ...
 git add <file-của-mình>
-git commit -m "[Bước N][Tên] mô tả ngắn"
+git commit -m "[Bước 1][Tên] mô tả ngắn"
 git push
 ```
 
-6. Trên GitHub: tick checklist trong issue → **Close issue**.
-7. Khi cả nhóm xong: đóng issue `[Checklist nhóm]` của bước đó.
+#### Đóng bước → về `main` (Leader hoặc người được cử)
 
-### 4.3 Message commit (đúng mẫu)
+Khi issue **Checklist nhóm** đã đóng:
+
+```bash
+git checkout main
+git pull
+git merge step-1
+git push
+# (tuỳ chọn) xóa nhánh bước trên remote sau khi merge ổn
+git push origin --delete step-1
+```
+
+**Word / Excel:** nhánh **không** tránh được conflict `.docx`/`.xlsx`. Trước khi sửa SRS hoặc TeamWork → **báo nhóm chat**; một lúc chỉ **một người** sửa file đó.
+
+### 4.3 Làm 1 issue như thế nào?
+
+1. Mở issue được **assign** cho mình → đọc checklist.
+2. Checkout đúng nhánh bước đang làm (`step-N`), rồi `git pull`.
+3. Làm phần mình (`docs/stepN/` hoặc sơ đồ VP).
+4. **Báo nhóm** trước khi sửa `01_SRS_GMS.docx` / Excel.
+5. Commit + push lên **`step-N`** (không tạo nhánh riêng lung tung).
+6. Tick checklist trong issue → **Close issue**.
+7. Cả nhóm xong → đóng **`[Checklist nhóm]`** → Leader **merge `step-N` → `main`**.
+
+### 4.4 Message commit (đúng mẫu)
 
 ```
 [Bước N][Tên] mô tả ngắn
@@ -147,15 +189,6 @@ Ví dụ:
 [Bước 2][Phước] CD-01 + export PNG
 [Bước 4][Huy] đặc tả UC-16, UC-17
 ```
-
-### 4.4 Nhánh (khuyến nghị)
-
-| Loại    | Tên                    | Khi nào                        |
-| ------- | ---------------------- | ------------------------------ |
-| Chính   | `main`                 | Merge khi checklist bước OK    |
-| Cá nhân | `step<N>/<ten>-<viec>` | Làm song song, tránh đụng nhau |
-
-Ví dụ: `step1/thien-user-class-customer`
 
 ---
 
@@ -347,10 +380,11 @@ Mọi người vào làm SWR302 GMS giúp mình:
    Link nhanh: https://github.com/phuocvanday/SWR302-GroupOfFour/issues/assigned/
 
 Làm Bước 0 trước → rồi Bước 1.
+Git: cả nhóm commit trên nhánh step-0 / step-1 (một nhánh/bước), xong checklist thì merge vào main.
 Xong phần mình: commit + push + đóng issue.
 Đủ checklist nhóm mới sang bước sau.
 ```
 
 ---
 
-**Tóm lại:** **8 bước** (+ Bước 0). Việc đã **gán sẵn trên GitHub**. Mỗi người: **issue của mình → làm → commit → đóng issue → checklist nhóm → bước tiếp.**
+**Tóm lại:** **8 bước** (+ Bước 0). Việc đã **gán sẵn trên GitHub**. Git: **một nhánh `step-N` / bước**. Mỗi người: **issue → làm trên `step-N` → commit → đóng issue → checklist nhóm → merge `main` → bước tiếp.**
