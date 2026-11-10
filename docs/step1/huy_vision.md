@@ -1,62 +1,62 @@
-# Bước 1 — Huy (Owner / Báo cáo / Ràng buộc)
+# Step 1 — Huy (Owner / Reporting / Constraints)
 
-> Issue: #8 · Milestone Bước 1 hết hạn 16/11/2026
+> Issue: #8 · Milestone: Step 1 due 16/11/2026
 
 ## 1. User class — Gym Owner (SRS §2.2)
 
-| User class | Mô tả | Tần suất sử dụng | Trình độ / kỹ năng | Quyền hạn chính | Favored? |
+| User class | Description | Frequency of use | Level / skills | Main privileges | Favored? |
 |---|---|---|---|---|---|
-| Gym Owner | Chủ hoặc quản lý phòng gym, trực tiếp vận hành tại quầy | Trung bình–Cao: thao tác quầy nhiều lần mỗi ngày, xem báo cáo ít nhất 1 lần/tuần | Trung bình: dùng thành thạo trình duyệt và Excel, không có kiến thức kỹ thuật | Đăng ký và kích hoạt membership (UC-05, UC-06), duyệt tài khoản PT (UC-17), quản lý danh mục gói, xử lý khiếu nại, tạo và xuất báo cáo (UC-21, UC-22) | **Có**: Owner chịu trách nhiệm kinh doanh và ra quyết định, nên khi yêu cầu xung đột thì ưu tiên yêu cầu của Owner |
+| Gym Owner | Owner or manager of the gym, directly operating at the front desk | Medium–High: front-desk operations multiple times a day, report review at least once a week | Intermediate: proficient with browsers and Excel, no technical background | Register and activate memberships (UC-05, UC-06), approve PT accounts (UC-17), manage package catalog, handle complaints, create and export reports (UC-21, UC-22) | **Yes**: the Owner is responsible for business operations and decision-making, so when requirements conflict, Owner requirements take priority |
 
-## 2. §2.3 Môi trường vận hành
+## 2. §2.3 Operating environment
 
-- OE-1: Hệ thống chạy trên web, hiển thị đúng trên trình duyệt Chrome và Edge (2 phiên bản mới nhất) ở giao diện responsive.
-- OE-2: Quầy dùng máy tính hoặc tablet; tablet tại cửa dùng camera để quét QR.
-- OE-3: Máy chủ đặt trên cloud Linux, truy cập qua HTTPS; dữ liệu lưu trong CSDL quan hệ dùng chung cho mọi actor.
-- OE-4: Tích hợp bên ngoài: Payment Gateway qua REST API, SMS Service qua API, module sinh và xác thực mã QR.
+- OE-1: The system runs on the web and displays correctly in Chrome and Edge (latest 2 versions) with a responsive interface.
+- OE-2: Front desk uses a computer or tablet; the tablet at the entrance uses a camera to scan QR codes.
+- OE-3: The server is hosted on a Linux cloud, accessed via HTTPS; data is stored in a shared relational database for all actors.
+- OE-4: External integrations: Payment Gateway via REST API, SMS Service via API, QR generation and verification module.
 
-## 3. §2.4 Ràng buộc thiết kế và cài đặt
+## 3. §2.4 Design and implementation constraints
 
-- CON-1: Tuân thủ Nghị định 13/2023/NĐ-CP khi thu thập và xử lý dữ liệu cá nhân của khách (CCCD, SĐT, email).
-- CON-2: Giao diện bằng tiếng Việt; tiền tệ **VND**; múi giờ **UTC+7**; ngày hiển thị dạng **dd/mm/yyyy**.
-- CON-3: Mọi sơ đồ UML, DFD, ERD vẽ bằng **Visual Paradigm** và nộp file `.vpp`; wireframe vẽ bằng Figma, Stitch hoặc draw.io.
-- CON-4: Thanh toán online xử lý qua Payment Gateway bên ngoài; hệ thống không lưu số thẻ của khách.
-- CON-5: Release 1 phục vụ 1 cơ sở phòng gym.
-- CON-6: Mỗi bước nộp theo hạn milestone trên GitHub (Bước 1 hết hạn 16/11/2026); hạn nộp cả bài theo thông báo của giảng viên.
+- CON-1: Comply with Decree 13/2023/NĐ-CP when collecting and processing personal data of customers (ID card, phone number, email).
+- CON-2: Interface in Vietnamese; currency is **VND**; time zone is **UTC+7**; dates are displayed in **dd/mm/yyyy** format.
+- CON-3: All UML, DFD, and ERD diagrams are created using **Visual Paradigm** and submitted as `.vpp` files; wireframes are created in Figma, Stitch, or draw.io.
+- CON-4: Online payments are processed through an external Payment Gateway; the system does not store customers' card numbers.
+- CON-5: Release 1 serves one gym location.
+- CON-6: Each submission step follows the milestone deadline on GitHub (Step 1 due 16/11/2026); the final assignment submission deadline follows the lecturer's announcement.
 
-## 4. Scope báo cáo và thanh toán (Release 1)
+## 4. Reporting and payment scope (Release 1)
 
-| Trong phạm vi (Release 1) | Ngoài phạm vi / Release sau |
+| In scope (Release 1) | Out of scope / Future release |
 |---|---|
-| Tạo báo cáo vận hành: doanh thu, lượt check-in, buổi PT hoàn tất (UC-21) | Tích hợp kế toán ERP đầy đủ |
-| Xuất báo cáo ra file Excel (UC-22) | Xuất PDF; dashboard tùy biến theo người dùng |
-| Thanh toán membership và gói PT qua cổng thanh toán, và thu tiền mặt tại quầy | Tự xây cổng thanh toán; lưu thông tin thẻ |
-| Hoàn tiền qua cổng thanh toán khi PT từ chối hoặc quá 24 giờ không phản hồi (BR-08, BR-09) | Chi nhánh đa quốc gia, đa tiền tệ |
-| Tiếp nhận và xử lý khiếu nại cơ bản (UC-25, UC-26) | Hóa đơn điện tử, kê khai thuế |
+| Create operational reports: revenue, check-ins, completed PT sessions (UC-21) | Full ERP accounting integration |
+| Export reports to Excel files (UC-22) | PDF export; user-customizable dashboard |
+| Process membership and PT package payments through a payment gateway, and collect cash at the front desk | Build the payment gateway internally; store card information |
+| Refund via payment gateway when PT rejects or no response within 24 hours (BR-08, BR-09) | Multi-branch, multi-currency operations |
+| Receive and process basic complaints (UC-25, UC-26) | Electronic invoices, tax declaration |
 
-## 5. BO-04 (đo được)
+## 5. BO-04 (measurable)
 
-| ID | Mục tiêu kinh doanh | Chỉ số đo (success metric) |
+| ID | Business goal | Measurement metric |
 |---|---|---|
-| BO-04 | Chủ gym ra quyết định vận hành dựa trên số liệu thay cho thống kê thủ công | Trong 3 tháng đầu sau khi đưa vào sử dụng: (1) ≥ 90% lượt xuất báo cáo tháng ra Excel hoàn tất trong **≤ 60 giây**; (2) Owner mở báo cáo **ít nhất 1 lần/tuần** trong ≥ 10 trên 12 tuần |
+| BO-04 | The gym owner makes operational decisions based on data instead of manual statistics | In the first 3 months after deployment: (1) ≥ 90% of monthly report exports to Excel are completed within **≤ 60 seconds**; (2) the Owner opens the report **at least once a week** in ≥ 10 out of 12 weeks |
 
-**Cách đo:**
+**Measurement method:**
 
-- **Chỉ số (1) — thời gian xuất báo cáo:** chạy 20 lần trên môi trường thử với dữ liệu 1 tháng gồm 500 membership đang hoạt động, 15.000 lượt check-in và 400 booking PT. Mỗi lần bấm giờ từ lúc Owner bấm "Tạo báo cáo" đến lúc tải xong file `.xlsx`. Đạt khi có ít nhất 18 trên 20 lần ≤ 60 giây (tương đương 90%).
-- **Chỉ số (2) — mức độ sử dụng:** đếm từ log hệ thống số tuần trong 12 tuần đầu có ít nhất 1 lượt Owner mở trang báo cáo. Đạt khi có ≥ 10 trên 12 tuần.
+- **Metric (1) — report export time:** run 20 times in a test environment with data for 1 month including 500 active memberships, 15,000 check-ins, and 400 PT bookings. Measure the time from when the Owner clicks "Create report" to when the `.xlsx` file is downloaded. Success is achieved when at least 18 out of 20 runs are ≤ 60 seconds (equivalent to 90%).
+- **Metric (2) — usage level:** count from system logs the number of weeks in the first 12 weeks with at least one report page open by the Owner. Success is achieved when there are ≥ 10 out of 12 weeks.
 
-## 6. BR / CSKH (nháp, nhóm chốt chính thức ở Bước 3)
+## 6. BR / Customer service (draft; official key group finalized in Step 3)
 
-| ID | Business rule | Loại | Nguồn |
+| ID | Business rule | Type | Source |
 |---|---|---|---|
-| BR-12 | Khiếu nại chỉ được tạo trong **7 ngày** sau buổi tập hoặc sự kiện liên quan | Constraint | CSKH |
-| BR-13 | Khi booking PT bị từ chối hoặc quá 24 giờ không được phản hồi, hệ thống hoàn **100%** số tiền đã thu trong vòng **3 ngày làm việc**, về đúng phương thức thanh toán ban đầu (cổng thanh toán hoặc tiền mặt tại quầy), không khấu trừ phí giao dịch | Action enabler | CSKH / Tài chính |
+| BR-12 | Complaints can only be created within **7 days** after the training session or related event | Constraint | CSKH |
+| BR-13 | When a PT booking is rejected or no response is received within 24 hours, the system refunds **100%** of the collected amount within **3 working days**, back to the original payment method (payment gateway or cash at the front desk), without deducting transaction fees | Action enabler | CSKH / Finance |
 
 ## 7. References (§1.4)
 
-1. Nhóm SWR302, `HuongDan_Assignment.md` — Hướng dẫn assignment SRS, FPT University.
-2. Chính phủ Việt Nam, *Nghị định 13/2023/NĐ-CP về bảo vệ dữ liệu cá nhân*, 17/04/2023.
-3. Visual Paradigm Community — tài liệu hướng dẫn UML/ERD (https://www.visual-paradigm.com).
-4. Wiegers, K. & Beatty, J., *Software Requirements*, 3rd Edition, Microsoft Press, 2013 — các chương 11, 12, 14, 17 được đề nhắc tới.
+1. SWR302 Team, `HuongDan_Assignment.md` — SRS assignment guide, FPT University.
+2. Government of Vietnam, *Decree 13/2023/NĐ-CP on personal data protection*, 17/04/2023.
+3. Visual Paradigm Community — UML/ERD tutorial documents (https://www.visual-paradigm.com).
+4. Wiegers, K. & Beatty, J., *Software Requirements*, 3rd Edition, Microsoft Press, 2013 — chapters 11, 12, 14, and 17 are referenced.
 5. IEEE Std 830-1998, *IEEE Recommended Practice for Software Requirements Specifications*.
-6. `kimi2.5-project.md` — ý tưởng ban đầu của nhóm.
+6. `kimi2.5-project.md` — initial project idea of the team.
